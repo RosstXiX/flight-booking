@@ -1,5 +1,5 @@
 -- Airports
-INSERT INTO airports (code, city, country, name, timezone)
+INSERT INTO airports (code, name, city, country, timezone)
 VALUES ('KBP', 'Boryspil International Airport', 'Kyiv', 'Ukraine', 'Europe/Kiev'),
        ('LWO', 'Lviv Danylo Halytskyi International Airport', 'Lviv', 'Ukraine', 'Europe/Kiev'),
        ('ODS', 'Odesa International Airport', 'Odesa', 'Ukraine', 'Europe/Kiev'),
