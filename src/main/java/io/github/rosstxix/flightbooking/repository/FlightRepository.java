@@ -10,8 +10,11 @@ import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    @Query("SELECT f FROM Flight f WHERE " +
-           "f.departureAirport.code = :from AND " +
+    @Query("SELECT f FROM Flight f " +
+           "JOIN FETCH f.departureAirport " +
+           "JOIN FETCH f.arrivalAirport " +
+           "JOIN FETCH f.aircraft " +
+           "WHERE f.departureAirport.code = :from AND " +
            "f.arrivalAirport.code = :to AND " +
            "f.departureUtc >= :startUtc AND " +
            "f.departureUtc < :endUtc AND " +
