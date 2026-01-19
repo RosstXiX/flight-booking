@@ -25,12 +25,12 @@ public class FlightService {
     public List<FlightDTO> searchFlights(FlightSearchRequest request) {
         // Convert LocalDate to UTC diapason for searching
         // TODO: Search by departure airport timezone, not UTC
-        Instant startUtc = request.getDate().atStartOfDay(ZoneId.of("UTC")).toInstant();
-        Instant endUtc = request.getDate().plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant();
+        Instant startUtc = request.date().atStartOfDay(ZoneId.of("UTC")).toInstant();
+        Instant endUtc = request.date().plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant();
 
         List<Flight> flights = flightRepository.searchFlights(
-                request.getFromCode(),
-                request.getToCode(),
+                request.fromCode(),
+                request.toCode(),
                 startUtc,
                 endUtc
         );
@@ -48,41 +48,33 @@ public class FlightService {
 
 
     private FlightDTO convertToDTO(Flight flight) {
-        FlightDTO dto = new FlightDTO();
-        dto.setId(flight.getId());
-        dto.setFlightNumber(flight.getFlightNumber());
-
-        // Airports
-        dto.setDepartureAirportCode(flight.getDepartureAirport().getCode());
-        dto.setDepartureAirportCity(flight.getDepartureAirport().getCity());
-        dto.setArrivalAirportCode(flight.getArrivalAirport().getCode());
-        dto.setArrivalAirportCity(flight.getArrivalAirport().getCity());
 
         // UTC Instant -> local airport time
         LocalDateTime departureLocal = LocalDateTime.ofInstant(
                 flight.getDepartureUtc(),
                 ZoneId.of(flight.getDepartureAirport().getTimeZone())
         );
-        dto.setDepartureLocalTime(departureLocal);
-
         LocalDateTime arrivalLocal = LocalDateTime.ofInstant(
                 flight.getArrivalUtc(),
                 ZoneId.of(flight.getArrivalAirport().getTimeZone())
         );
-        dto.setArrivalLocalTime(arrivalLocal);
-
-        // Aircraft
-        dto.setAircraftModel(flight.getAircraft().getModel());
-        dto.setTotalSeats(flight.getAircraft().getTotalSeats());
-
-        dto.setPrice(flight.getPrice());
-        dto.setStatus(flight.getStatus().toString());
-
-        // Flight duration
         Duration duration = Duration.between(flight.getDepartureUtc(), flight.getArrivalUtc());
-        dto.setDurationMinutes(duration.toMinutes());
 
-        return dto;
+        return new FlightDTO(
+                flight.getId(),
+                flight.getFlightNumber(),
+                flight.getDepartureAirport().getCode(),
+                flight.getDepartureAirport().getCity(),
+                flight.getArrivalAirport().getCode(),
+                flight.getArrivalAirport().getCity(),
+                departureLocal,
+                arrivalLocal,
+                flight.getAircraft().getModel(),
+                flight.getAircraft().getTotalSeats(),
+                flight.getPrice(),
+                flight.getStatus().toString(),
+                duration.toMinutes()
+        );
     }
 
 }
