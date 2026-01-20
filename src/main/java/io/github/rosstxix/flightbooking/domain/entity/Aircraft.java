@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
 @Entity
 @Table(name = "aircrafts")
@@ -23,6 +22,4 @@ public class Aircraft {
     @Column(name = "total_seats", nullable = false)
     private Integer totalSeats;
 
-    @OneToMany(mappedBy = "aircraft")
-    private List<Flight> flights;
 }

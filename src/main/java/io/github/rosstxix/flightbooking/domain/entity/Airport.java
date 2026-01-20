@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
 @Entity
 @Table(name = "airports")
@@ -32,9 +31,4 @@ public class Airport {
     @Column(name = "timezone", nullable = false)
     private String timeZone;
 
-    @OneToMany(mappedBy = "departureAirport")
-    private List<Flight> departureFlights;
-
-    @OneToMany(mappedBy = "arrivalAirport")
-    private List<Flight> arrivalFlights;
 }
