@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.dto;
+package io.github.rosstxix.flightbooking.dto.request;
 
 import java.time.LocalDate;
 

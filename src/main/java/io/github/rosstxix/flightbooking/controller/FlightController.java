@@ -1,8 +1,7 @@
 package io.github.rosstxix.flightbooking.controller;
 
-import io.github.rosstxix.flightbooking.dto.FlightDTO;
-import io.github.rosstxix.flightbooking.dto.FlightSearchRequest;
-import io.github.rosstxix.flightbooking.entity.Flight;
+import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
+import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
 import io.github.rosstxix.flightbooking.service.FlightService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +21,19 @@ public class FlightController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<FlightDTO>> searchFlights(
+    public ResponseEntity<List<FlightSearchResponse>> searchFlights(
             @RequestParam String from,
             @RequestParam String to,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         FlightSearchRequest request = new FlightSearchRequest(from, to, date);
-        List<FlightDTO> flights = flightService.searchFlights(request);
+        List<FlightSearchResponse> flights = flightService.searchFlights(request);
         return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FlightDTO> getFlightDetails(@PathVariable Long id) {
-        FlightDTO flight = flightService.getFlightDetails(id);
+    public ResponseEntity<FlightSearchResponse> getFlightDetails(@PathVariable Long id) {
+        FlightSearchResponse flight = flightService.getFlightDetails(id);
         return ResponseEntity.ok(flight);
     }
 }

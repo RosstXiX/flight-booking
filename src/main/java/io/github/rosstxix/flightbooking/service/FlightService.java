@@ -1,8 +1,8 @@
 package io.github.rosstxix.flightbooking.service;
 
-import io.github.rosstxix.flightbooking.dto.FlightDTO;
-import io.github.rosstxix.flightbooking.dto.FlightSearchRequest;
-import io.github.rosstxix.flightbooking.entity.Flight;
+import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
+import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
+import io.github.rosstxix.flightbooking.domain.entity.Flight;
 import io.github.rosstxix.flightbooking.repository.FlightRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class FlightService {
         this.flightRepository = flightRepository;
     }
 
-    public List<FlightDTO> searchFlights(FlightSearchRequest request) {
+    public List<FlightSearchResponse> searchFlights(FlightSearchRequest request) {
         // Convert LocalDate to UTC diapason for searching
         // TODO: Search by departure airport timezone, not UTC
         Instant startUtc = request.date().atStartOfDay(ZoneId.of("UTC")).toInstant();
@@ -40,14 +40,13 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    public FlightDTO getFlightDetails(Long id) {
+    public FlightSearchResponse getFlightDetails(Long id) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Flight not found"));
         return convertToDTO(flight);
     }
 
-
-    private FlightDTO convertToDTO(Flight flight) {
+    private FlightSearchResponse convertToDTO(Flight flight) {
 
         // UTC Instant -> local airport time
         LocalDateTime departureLocal = LocalDateTime.ofInstant(
@@ -60,7 +59,7 @@ public class FlightService {
         );
         Duration duration = Duration.between(flight.getDepartureUtc(), flight.getArrivalUtc());
 
-        return new FlightDTO(
+        return new FlightSearchResponse(
                 flight.getId(),
                 flight.getFlightNumber(),
                 flight.getDepartureAirport().getCode(),

@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.entity;
+package io.github.rosstxix.flightbooking.domain.entity;
 
 public enum FlightStatus {
     SCHEDULED,

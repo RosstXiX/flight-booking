@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.repository;
 
-import io.github.rosstxix.flightbooking.entity.Flight;
+import io.github.rosstxix.flightbooking.domain.entity.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

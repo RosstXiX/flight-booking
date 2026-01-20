@@ -1,9 +1,9 @@
-package io.github.rosstxix.flightbooking.dto;
+package io.github.rosstxix.flightbooking.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record FlightDTO(
+public record FlightSearchResponse(
         Long id,
         String flightNumber,
         String departureAirportCode,
