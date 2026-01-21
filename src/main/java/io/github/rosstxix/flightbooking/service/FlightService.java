@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.service;
 
+import io.github.rosstxix.flightbooking.common.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.domain.entity.Airport;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
@@ -7,7 +8,6 @@ import io.github.rosstxix.flightbooking.domain.entity.Flight;
 import io.github.rosstxix.flightbooking.mapper.FlightMapper;
 import io.github.rosstxix.flightbooking.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.repository.FlightRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -35,7 +35,7 @@ public class FlightService {
         // Convert LocalDate to UTC diapason for searching
 
         Airport departureAirport = airportRepository.findByCode(request.fromCode())
-                .orElseThrow(() -> new EntityNotFoundException("Airport with code=%s not found".formatted(request.fromCode())));
+                .orElseThrow(() -> new EntityNotFoundApiException("Airport with code %s not found".formatted(request.fromCode())));
 
         ZoneId zone = ZoneId.of(departureAirport.getTimeZone());
 
@@ -56,7 +56,7 @@ public class FlightService {
 
     public FlightSearchResponse getFlightDetails(Long id) {
         Flight flight = flightRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Flight not found"));
+                .orElseThrow(() -> new EntityNotFoundApiException("Flight with id %d not found".formatted(id)));
         return flightMapper.toSearchResponse(flight);
     }
 
