@@ -10,6 +10,7 @@ import io.github.rosstxix.flightbooking.common.error.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.stream.Collectors;
 
@@ -70,6 +71,33 @@ public class GlobalExceptionHandler {
                     return param + " : " + violation.getMessage();
                 })
                 .collect(Collectors.joining("; "));
+
+        ErrorResponse response = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ApiErrorCode.VALIDATION_ERROR,
+                message,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException ex,
+            HttpServletRequest request
+    ) {
+        String field = ex.getName();
+
+        String expectedType = ex.getRequiredType() != null
+                ? ex.getRequiredType().getSimpleName()
+                : "unknown";
+
+        String actualValue = ex.getValue() != null
+                ? ex.getValue().toString()
+                : "null";
+
+        String message = "%s : expected %s, but was '%s'".formatted(field, expectedType, actualValue);
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
