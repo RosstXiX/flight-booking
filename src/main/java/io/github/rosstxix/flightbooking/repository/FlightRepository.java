@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
@@ -26,4 +27,13 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             @Param("startUtc") Instant startUtc,
             @Param("endUtc") Instant endUtc
     );
+
+    @Override
+    @Query("SELECT f FROM Flight f " +
+          "JOIN FETCH f.departureAirport " +
+          "JOIN FETCH f.arrivalAirport " +
+          "JOIN FETCH f.aircraft " +
+          "WHERE f.id = :id"
+    )
+    Optional<Flight> findById(@Param("id") Long id);
 }
