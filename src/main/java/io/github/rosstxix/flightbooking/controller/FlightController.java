@@ -36,8 +36,7 @@ public class FlightController {
     @GetMapping("/{id}")
     public ResponseEntity<FlightSearchResponse> getFlightDetails(
             @PathVariable
-            @NotNull()
-            @Positive
+            @Positive(message = "Flight id must be greater than zero")
             Long id) {
         FlightSearchResponse flight = flightService.getFlightDetails(id);
         return ResponseEntity.ok(flight);
