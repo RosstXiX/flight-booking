@@ -4,6 +4,7 @@ import io.github.rosstxix.flightbooking.common.error.ApiErrorCode;
 import io.github.rosstxix.flightbooking.common.exception.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.github.rosstxix.flightbooking.common.error.ErrorResponse;
@@ -14,6 +15,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,6 +24,8 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest req
     ) {
+        log.error("Unexpected error occurred", ex);
+
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ApiErrorCode.INTERNAL_SERVER_ERROR,
