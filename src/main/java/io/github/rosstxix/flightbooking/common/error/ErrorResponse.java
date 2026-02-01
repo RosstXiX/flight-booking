@@ -16,9 +16,9 @@ public class ErrorResponse {
     private final int status;
     @Schema(description = "Error code", example = "VALIDATION_ERROR", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String error;
-    @Schema(description = "Detailed error message", example = "fromCode : Departure airport code must be a valid IATA code (3 uppercase letters", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Detailed error message", example = "fromCode : Departure airport code must be a valid IATA code (3 uppercase letters)", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String message;
-    @Schema(description = "Path of the request", example = "api/flights/search", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Path of the request", example = "/api/flights/search", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String path;
 
     public ErrorResponse(
