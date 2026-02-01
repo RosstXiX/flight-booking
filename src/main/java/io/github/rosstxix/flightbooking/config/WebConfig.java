@@ -15,7 +15,7 @@ public class WebConfig {
         filter.setIncludePayload(false);    // Not logging request body
         filter.setMaxPayloadLength(10000);
         filter.setIncludeHeaders(false);
-        filter.setAfterMessagePrefix("REQUEST DATA: ");
+        filter.setAfterMessagePrefix("REQUEST DATA: [");
 
         return filter;
     }
