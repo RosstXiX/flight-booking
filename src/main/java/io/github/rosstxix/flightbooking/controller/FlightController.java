@@ -64,10 +64,9 @@ public class FlightController {
                     )
             )
     })
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Search criteria", required = true)
     @GetMapping("/search")
     public ResponseEntity<Page<FlightSearchResponse>> searchFlights(
-            @Valid @ModelAttribute FlightSearchRequest request,
+            @Valid @ModelAttribute @ParameterObject FlightSearchRequest request,
             @ParameterObject Pageable pageable
     ) {
         Page<FlightSearchResponse> flights = flightService.searchFlights(request, pageable);
