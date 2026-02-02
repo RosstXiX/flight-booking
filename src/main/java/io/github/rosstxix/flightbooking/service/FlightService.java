@@ -9,6 +9,8 @@ import io.github.rosstxix.flightbooking.mapper.FlightMapper;
 import io.github.rosstxix.flightbooking.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.repository.FlightRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,7 +35,7 @@ public class FlightService {
         this.airportRepository = airportRepository;
     }
 
-    public List<FlightSearchResponse> searchFlights(FlightSearchRequest request) {
+    public Page<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         log.info("Searching flights: from={}, to={}, date={}",
                 request.fromCode(), request.toCode(), request.date());
 
@@ -50,17 +52,16 @@ public class FlightService {
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
         Instant endUtc = request.date().plusDays(1).atStartOfDay(zone).toInstant();
 
-        List<Flight> flights = flightRepository.searchFlights(
+        Page<Flight> flights = flightRepository.searchFlights(
                 request.fromCode(),
                 request.toCode(),
                 startUtc,
-                endUtc
+                endUtc,
+                pageable
         );
-        log.debug("Found {} flights for request", flights.size());
+        log.debug("Found {} flights for request", flights.getTotalElements());
 
-        return flights.stream()
-                .map(flightMapper::toSearchResponse)
-                .collect(Collectors.toList());
+        return flights.map(flightMapper::toSearchResponse);
     }
 
     public FlightSearchResponse getFlightDetails(Long id) {

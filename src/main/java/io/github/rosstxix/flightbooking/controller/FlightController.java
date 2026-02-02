@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -63,10 +66,11 @@ public class FlightController {
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Search criteria", required = true)
     @GetMapping("/search")
-    public ResponseEntity<List<FlightSearchResponse>> searchFlights(
-            @Valid @ModelAttribute FlightSearchRequest request
+    public ResponseEntity<Page<FlightSearchResponse>> searchFlights(
+            @Valid @ModelAttribute FlightSearchRequest request,
+            @ParameterObject Pageable pageable
     ) {
-        List<FlightSearchResponse> flights = flightService.searchFlights(request);
+        Page<FlightSearchResponse> flights = flightService.searchFlights(request, pageable);
         return ResponseEntity.ok(flights);
     }
 

@@ -1,12 +1,13 @@
 package io.github.rosstxix.flightbooking.repository;
 
 import io.github.rosstxix.flightbooking.domain.entity.Flight;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
@@ -21,11 +22,12 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
            "f.departureUtc < :endUtc AND " +
            "f.status = 'SCHEDULED'"
     )
-    List<Flight> searchFlights(
+    Page<Flight> searchFlights(
             @Param("from") String fromCode,
             @Param("to") String toCode,
             @Param("startUtc") Instant startUtc,
-            @Param("endUtc") Instant endUtc
+            @Param("endUtc") Instant endUtc,
+            Pageable pageable
     );
 
     @Override
