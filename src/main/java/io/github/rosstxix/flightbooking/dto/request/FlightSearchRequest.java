@@ -12,7 +12,7 @@ public record FlightSearchRequest(
                 regexp = "^[A-Z]{3}$",
                 message = "Departure airport code must be a valid IATA code (3 uppercase letters)"
         )
-        @Schema(description = "Code of the departure airport(IATA)", example = "KBP")
+        @Schema(description = "Code of the departure airport (IATA)", example = "KBP")
         String fromCode,
 
         @NotBlank(message = "Arrival airport code is required")
@@ -20,7 +20,7 @@ public record FlightSearchRequest(
                 regexp = "^[A-Z]{3}$",
                 message = "Arrival airport code must be a valid IATA code (3 uppercase letters)"
         )
-        @Schema(description = "Code of the arrival airport(IATA)", example = "LWO")
+        @Schema(description = "Code of the arrival airport (IATA)", example = "LWO")
         String toCode,
 
         @NotNull(message = "Departure date is required")
