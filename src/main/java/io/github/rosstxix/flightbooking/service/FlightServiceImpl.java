@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -35,6 +36,7 @@ public class FlightServiceImpl implements FlightService {
         this.airportRepository = airportRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         log.info("Searching flights: from={}, to={}, date={}",
                 request.fromCode(), request.toCode(), request.date());
@@ -64,6 +66,7 @@ public class FlightServiceImpl implements FlightService {
         return flights.map(flightMapper::toSearchResponse);
     }
 
+    @Transactional(readOnly = true)
     public FlightSearchResponse getFlightDetails(Long id) {
         log.info("Searching flight details: id={}", id);
 
