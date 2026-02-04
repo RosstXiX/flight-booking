@@ -20,7 +20,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
            "f.arrivalAirport.code = :to AND " +
            "f.departureUtc >= :startUtc AND " +
            "f.departureUtc < :endUtc AND " +
-           "f.status = 'SCHEDULED'"
+           "f.status = io.github.rosstxix.flightbooking.domain.entity.FlightStatus.SCHEDULED"
     )
     Page<Flight> searchFlights(
             @Param("from") String fromCode,
