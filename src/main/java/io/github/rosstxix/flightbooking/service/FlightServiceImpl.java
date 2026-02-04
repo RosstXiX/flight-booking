@@ -1,10 +1,10 @@
 package io.github.rosstxix.flightbooking.service;
 
 import io.github.rosstxix.flightbooking.common.exception.EntityNotFoundApiException;
-import io.github.rosstxix.flightbooking.domain.entity.Airport;
+import io.github.rosstxix.flightbooking.domain.Airport;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
-import io.github.rosstxix.flightbooking.domain.entity.Flight;
+import io.github.rosstxix.flightbooking.domain.Flight;
 import io.github.rosstxix.flightbooking.mapper.FlightMapper;
 import io.github.rosstxix.flightbooking.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.repository.FlightRepository;
@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

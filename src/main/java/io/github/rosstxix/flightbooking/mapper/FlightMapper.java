@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.mapper;
 
-import io.github.rosstxix.flightbooking.domain.entity.Flight;
+import io.github.rosstxix.flightbooking.domain.Flight;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
 import org.springframework.stereotype.Component;
 

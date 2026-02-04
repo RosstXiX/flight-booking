@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.domain.entity;
+package io.github.rosstxix.flightbooking.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
