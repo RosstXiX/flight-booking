@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.repository;
 
 import io.github.rosstxix.flightbooking.domain.Flight;
+import io.github.rosstxix.flightbooking.dto.projection.FlightProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,17 +13,36 @@ import java.util.Optional;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    @Query("SELECT f FROM Flight f " +
-           "JOIN FETCH f.departureAirport " +
-           "JOIN FETCH f.arrivalAirport " +
-           "JOIN FETCH f.aircraft " +
-           "WHERE f.departureAirport.code = :from AND " +
-           "f.arrivalAirport.code = :to AND " +
-           "f.departureUtc >= :startUtc AND " +
-           "f.departureUtc < :endUtc AND " +
-           "f.status = io.github.rosstxix.flightbooking.domain.FlightStatus.SCHEDULED"
-    )
-    Page<Flight> searchFlights(
+    @Query("""
+                SELECT
+                    f.id AS id,
+                    f.flightNumber AS flightNumber,
+                    f.price AS price,
+                    f.status AS status,
+            
+                    da.code AS departureAirportCode,
+                    da.city AS departureAirportCity,
+                    da.timeZone AS departureAirportTimeZone,
+                    f.departureUtc AS departureUtc,
+            
+                    aa.code AS arrivalAirportCode,
+                    aa.city AS arrivalAirportCity,
+                    aa.timeZone AS arrivalAirportTimeZone,
+                    f.arrivalUtc AS arrivalUtc,
+            
+                    ac.model AS aircraftModel,
+                    ac.totalSeats AS totalSeats
+                FROM Flight f
+                    JOIN f.departureAirport da
+                    JOIN f.arrivalAirport aa
+                    JOIN f.aircraft ac
+                WHERE da.code = :from
+                    AND aa.code = :to
+                    AND f.departureUtc >= :startUtc
+                    AND f.departureUtc < :endUtc
+                    AND f.status = io.github.rosstxix.flightbooking.domain.FlightStatus.SCHEDULED
+            """)
+    Page<FlightProjection> searchFlights(
             @Param("from") String fromCode,
             @Param("to") String toCode,
             @Param("startUtc") Instant startUtc,
@@ -30,12 +50,30 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             Pageable pageable
     );
 
-    @Override
-    @Query("SELECT f FROM Flight f " +
-          "JOIN FETCH f.departureAirport " +
-          "JOIN FETCH f.arrivalAirport " +
-          "JOIN FETCH f.aircraft " +
-          "WHERE f.id = :id"
-    )
-    Optional<Flight> findById(@Param("id") Long id);
+    @Query("""
+                SELECT
+                    f.id AS id,
+                    f.flightNumber AS flightNumber,
+                    f.price AS price,
+                    f.status AS status,
+            
+                    da.code AS departureAirportCode,
+                    da.city AS departureAirportCity,
+                    da.timeZone AS departureAirportTimeZone,
+                    f.departureUtc AS departureUtc,
+            
+                    aa.code AS arrivalAirportCode,
+                    aa.city AS arrivalAirportCity,
+                    aa.timeZone AS arrivalAirportTimeZone,
+                    f.arrivalUtc AS arrivalUtc,
+            
+                    ac.model AS aircraftModel,
+                    ac.totalSeats AS totalSeats
+                FROM Flight f
+                    JOIN f.departureAirport da
+                    JOIN f.arrivalAirport aa
+                    JOIN f.aircraft ac
+                WHERE f.id = :id
+            """)
+    Optional<FlightProjection> findProjectionById(@Param("id") Long id);
 }

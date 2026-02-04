@@ -2,9 +2,9 @@ package io.github.rosstxix.flightbooking.service;
 
 import io.github.rosstxix.flightbooking.common.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.domain.Airport;
+import io.github.rosstxix.flightbooking.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
-import io.github.rosstxix.flightbooking.domain.Flight;
 import io.github.rosstxix.flightbooking.mapper.FlightMapper;
 import io.github.rosstxix.flightbooking.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.repository.FlightRepository;
@@ -52,30 +52,30 @@ public class FlightServiceImpl implements FlightService {
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
         Instant endUtc = request.date().plusDays(1).atStartOfDay(zone).toInstant();
 
-        Page<Flight> flights = flightRepository.searchFlights(
+        Page<FlightProjection> projections = flightRepository.searchFlights(
                 request.fromCode(),
                 request.toCode(),
                 startUtc,
                 endUtc,
                 pageable
         );
-        log.debug("Found {} flights for request", flights.getTotalElements());
+        log.debug("Found {} flights for request", projections.getTotalElements());
 
-        return flights.map(flightMapper::toSearchResponse);
+        return projections.map(flightMapper::toSearchResponse);
     }
 
     @Transactional(readOnly = true)
     public FlightSearchResponse getFlightDetails(Long id) {
         log.info("Searching flight details: id={}", id);
 
-        Flight flight = flightRepository.findById(id)
+        FlightProjection projection = flightRepository.findProjectionById(id)
                 .orElseThrow(() -> {
                     log.warn("Search failed: Flight with id {} not found", id);
                     return new EntityNotFoundApiException("Flight with id %d not found".formatted(id));
                 });
 
         log.debug("Found flight details for id={}", id);
-        return flightMapper.toSearchResponse(flight);
+        return flightMapper.toSearchResponse(projection);
     }
 
 }
