@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Mapper(componentModel = "spring", imports = {})
+@Mapper(componentModel = "spring")
 public interface FlightMapper {
 
     @Mapping(
