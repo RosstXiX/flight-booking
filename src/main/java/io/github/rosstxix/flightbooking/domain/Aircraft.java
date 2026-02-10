@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "aircrafts")
-@Getter @Setter
+@Getter
 @NoArgsConstructor @AllArgsConstructor
 public class Aircraft {
     @Id

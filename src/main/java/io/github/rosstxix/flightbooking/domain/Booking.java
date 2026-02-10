@@ -10,7 +10,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "bookings")
-@Getter @Setter
+@Getter
 @NoArgsConstructor @AllArgsConstructor
 public class Booking {
     @Id
