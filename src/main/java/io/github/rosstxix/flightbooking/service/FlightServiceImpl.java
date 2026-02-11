@@ -42,10 +42,9 @@ public class FlightServiceImpl implements FlightService {
         // Convert LocalDate to UTC diapason for searching
 
         Airport departureAirport = airportRepository.findByCode(request.fromCode())
-                .orElseThrow(() -> {
-                    log.warn("Search failed: Departure airport {} not found", request.fromCode());
-                    return new EntityNotFoundApiException("Airport with code %s not found".formatted(request.fromCode()));
-                });
+                .orElseThrow(() ->
+                    new EntityNotFoundApiException("Airport with code %s not found".formatted(request.fromCode()))
+                );
 
         ZoneId zone = ZoneId.of(departureAirport.getTimeZone());
 
@@ -59,8 +58,8 @@ public class FlightServiceImpl implements FlightService {
                 endUtc,
                 pageable
         );
-        log.debug("Found {} flights for request", projections.getTotalElements());
 
+        log.debug("Found {} flights for request", projections.getTotalElements());
         return projections.map(flightMapper::toSearchResponse);
     }
 
@@ -69,10 +68,9 @@ public class FlightServiceImpl implements FlightService {
         log.info("Searching flight details: id={}", id);
 
         FlightProjection projection = flightRepository.findProjectionById(id)
-                .orElseThrow(() -> {
-                    log.warn("Search failed: Flight with id {} not found", id);
-                    return new EntityNotFoundApiException("Flight with id %d not found".formatted(id));
-                });
+                .orElseThrow(() ->
+                    new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
+                );
 
         log.debug("Found flight details for id={}", id);
         return flightMapper.toSearchResponse(projection);

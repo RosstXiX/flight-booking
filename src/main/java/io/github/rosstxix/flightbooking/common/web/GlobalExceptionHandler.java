@@ -41,6 +41,8 @@ public class GlobalExceptionHandler {
             ApiException ex,
             HttpServletRequest request
     ) {
+        log.warn("API error: {}", ex.getMessage());
+
         ErrorResponse response = new ErrorResponse(
                 ex.getHttpStatus(),
                 ex.getErrorCode(),
@@ -61,6 +63,8 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(error -> error.getField() + " : " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
+
+        log.debug("Validation error: {}", message);
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
@@ -91,6 +95,8 @@ public class GlobalExceptionHandler {
                 })
                 .collect(Collectors.joining("; "));
 
+        log.debug("Validation error: {}", message);
+
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 ApiErrorCode.VALIDATION_ERROR,
@@ -117,6 +123,8 @@ public class GlobalExceptionHandler {
                 : "null";
 
         String message = "%s : expected %s, but was '%s'".formatted(field, expectedType, actualValue);
+
+        log.debug("Validation error: {}", message);
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST,
