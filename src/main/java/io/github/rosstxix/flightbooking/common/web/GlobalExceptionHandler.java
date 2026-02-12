@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest req
     ) {
-        log.error("Unexpected error occurred", ex);
+        log.error("Unexpected error occurred: {}", ex.getMessage(), ex);
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
             ApiException ex,
             HttpServletRequest request
     ) {
-        log.warn("API error: {}", ex.getMessage());
+        log.warn("API error [{}]: {}", ex.getErrorCode(), ex.getMessage());
 
         ErrorResponse response = new ErrorResponse(
                 ex.getHttpStatus(),
