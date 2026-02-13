@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.common.aspect;
+package io.github.rosstxix.flightbooking.logging.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Aspect
 public class LoggingAspect {
 
-    @Around("@annotation(Loggable) || @within(Loggable)")
+    @Around("@annotation(io.github.rosstxix.flightbooking.logging.aspect.Loggable) || @within(io.github.rosstxix.flightbooking.logging.aspect.Loggable)")
     public Object logExecution(ProceedingJoinPoint pjp) throws Throwable {
         String className = pjp.getSignature().getDeclaringTypeName();
         String simpleClassName = className.substring(className.lastIndexOf('.') + 1);

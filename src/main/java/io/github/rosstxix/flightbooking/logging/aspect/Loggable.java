@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.common.aspect;
+package io.github.rosstxix.flightbooking.logging.aspect;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

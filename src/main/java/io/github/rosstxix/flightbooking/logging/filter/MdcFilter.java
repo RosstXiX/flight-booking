@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.common.filter;
+package io.github.rosstxix.flightbooking.logging.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
