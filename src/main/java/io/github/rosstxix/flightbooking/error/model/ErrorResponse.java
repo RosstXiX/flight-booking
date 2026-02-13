@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.common.error;
+package io.github.rosstxix.flightbooking.error.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

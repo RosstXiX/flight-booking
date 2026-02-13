@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.service;
 
 import io.github.rosstxix.flightbooking.common.aspect.Loggable;
-import io.github.rosstxix.flightbooking.common.exception.EntityNotFoundApiException;
+import io.github.rosstxix.flightbooking.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.domain.Airport;
 import io.github.rosstxix.flightbooking.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;

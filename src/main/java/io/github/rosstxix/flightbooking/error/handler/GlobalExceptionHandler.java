@@ -1,13 +1,13 @@
-package io.github.rosstxix.flightbooking.common.web;
+package io.github.rosstxix.flightbooking.error.handler;
 
-import io.github.rosstxix.flightbooking.common.error.ApiErrorCode;
-import io.github.rosstxix.flightbooking.common.exception.ApiException;
+import io.github.rosstxix.flightbooking.error.model.ApiErrorCode;
+import io.github.rosstxix.flightbooking.error.exception.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import io.github.rosstxix.flightbooking.common.error.ErrorResponse;
+import io.github.rosstxix.flightbooking.error.model.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

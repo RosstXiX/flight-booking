@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.controller;
 
-import io.github.rosstxix.flightbooking.common.error.ErrorResponse;
+import io.github.rosstxix.flightbooking.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.dto.request.FlightSearchRequest;
 import io.github.rosstxix.flightbooking.service.FlightService;
@@ -12,18 +12,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Validated
 @Tag(name = "Flights", description = "Flight management and search")

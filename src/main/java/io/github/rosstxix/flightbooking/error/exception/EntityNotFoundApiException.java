@@ -1,6 +1,6 @@
-package io.github.rosstxix.flightbooking.common.exception;
+package io.github.rosstxix.flightbooking.error.exception;
 
-import io.github.rosstxix.flightbooking.common.error.ApiErrorCode;
+import io.github.rosstxix.flightbooking.error.model.ApiErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class EntityNotFoundApiException extends ApiException {
