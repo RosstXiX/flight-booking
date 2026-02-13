@@ -30,6 +30,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.USER;  // User bt default
+    private Role role = Role.USER;  // User by default
 
 }
