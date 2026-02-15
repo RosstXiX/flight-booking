@@ -32,5 +32,5 @@ VALUES
 ('PS501', 1, 5, 1, '2026-02-22 08:00:00+00', '2026-02-22 19:00:00+00', 12000.00, 'SCHEDULED');
 
 INSERT INTO users (email, password, first_name, last_name, role)
-VALUES ('admin@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Admin', 'User', 'ADMIN'),
-       ('user@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Test', 'User', 'USER');
+VALUES ('admin@example.com', '$2a$10$wr7TMVbDJxUbjoj7m/Z7fODcSs3eFH5uC2AVPEhp6Ekq9rmn0/jIy', 'Admin', 'User', 'ADMIN'),
+       ('user@example.com', '$2a$10$wr7TMVbDJxUbjoj7m/Z7fODcSs3eFH5uC2AVPEhp6Ekq9rmn0/jIy', 'Test', 'User', 'USER');
