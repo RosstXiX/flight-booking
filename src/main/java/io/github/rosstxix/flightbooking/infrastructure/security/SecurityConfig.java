@@ -11,18 +11,26 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
+    private final AuthenticationEntryPoint authEntryPoint;
+    private final AccessDeniedHandler accessDeniedHandler;
 
     public SecurityConfig(
-            JwtAuthFilter jwtAuthFilter
+            JwtAuthFilter jwtAuthFilter,
+            AuthenticationEntryPoint aep,
+            AccessDeniedHandler adh
     ) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.authEntryPoint = aep;
+        this.accessDeniedHandler = adh;
     }
 
     @Bean
@@ -34,6 +42,9 @@ class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

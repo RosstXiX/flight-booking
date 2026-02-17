@@ -1,9 +1,12 @@
 package io.github.rosstxix.flightbooking.infrastructure.security.jwt.service;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -43,17 +46,19 @@ public class JwtServiceImpl implements JwtService{
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+    public String validateAndExtractUsername(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new CredentialsExpiredException("JWT expired", e);
+        } catch (JwtException e) {
+            throw new BadCredentialsException("Invalid JWT", e);
+        }
     }
 
-    public boolean isTokenValid(String token, UserDetails user) {
-        String username = extractUsername(token);
-        return username.equals(user.getUsername());
-    }
 }
