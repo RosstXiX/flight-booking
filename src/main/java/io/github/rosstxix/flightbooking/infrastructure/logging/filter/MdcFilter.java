@@ -19,14 +19,20 @@ public class MdcFilter extends OncePerRequestFilter {
     private static final String TRACE_ID = "traceId";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String traceId = UUID.randomUUID().toString().substring(0, 8);
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+
+        String traceId = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
         MDC.put(TRACE_ID, traceId);
+        response.setHeader("X-Request-ID", traceId);
 
         try {
             filterChain.doFilter(request, response);
         } finally {
-            MDC.remove(TRACE_ID);
+            MDC.clear();
         }
     }
 }
