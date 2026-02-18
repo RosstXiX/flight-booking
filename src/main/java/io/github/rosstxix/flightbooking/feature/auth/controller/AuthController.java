@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.auth.controller;
 
 import io.github.rosstxix.flightbooking.feature.auth.dto.LoginRequest;
-import io.github.rosstxix.flightbooking.infrastructure.security.jwt.service.AuthService;
+import io.github.rosstxix.flightbooking.feature.auth.service.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,6 @@ public class AuthController {
     public String login(
             @RequestBody LoginRequest request
     ) {
-        return authService.authenticate(request);
+        return authService.login(request);
     }
 }
