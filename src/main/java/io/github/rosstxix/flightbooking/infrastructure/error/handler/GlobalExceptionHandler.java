@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.infrastructure.error.handler;
 
+import io.github.rosstxix.flightbooking.infrastructure.error.ErrorResponseFactory;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private final ErrorResponseFactory errorResponseFactory;
+
+    public GlobalExceptionHandler(ErrorResponseFactory errorResponseFactory) {
+        this.errorResponseFactory = errorResponseFactory;
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(
@@ -26,12 +32,7 @@ public class GlobalExceptionHandler {
     ) {
         log.error("Unexpected error occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse response = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                ApiErrorCode.INTERNAL_SERVER_ERROR,
-                ex.getMessage(),
-                req.getRequestURI()
-        );
+        ErrorResponse response = errorResponseFactory.internalError(req.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
     ) {
         log.warn("API error [{}]: {}", ex.getErrorCode(), ex.getMessage());
 
-        ErrorResponse response = new ErrorResponse(
+        ErrorResponse response = errorResponseFactory.create(
                 ex.getHttpStatus(),
                 ex.getErrorCode(),
                 ex.getMessage(),
@@ -66,9 +67,7 @@ public class GlobalExceptionHandler {
 
         log.debug("Validation error: {}", message);
 
-        ErrorResponse response = new ErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ApiErrorCode.VALIDATION_ERROR,
+        ErrorResponse response = errorResponseFactory.validationError(
                 message,
                 request.getRequestURI()
         );
@@ -97,9 +96,7 @@ public class GlobalExceptionHandler {
 
         log.debug("Validation error: {}", message);
 
-        ErrorResponse response = new ErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ApiErrorCode.VALIDATION_ERROR,
+        ErrorResponse response = errorResponseFactory.validationError(
                 message,
                 request.getRequestURI()
         );
@@ -126,9 +123,7 @@ public class GlobalExceptionHandler {
 
         log.debug("Validation error: {}", message);
 
-        ErrorResponse response = new ErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ApiErrorCode.VALIDATION_ERROR,
+        ErrorResponse response = errorResponseFactory.validationError(
                 message,
                 request.getRequestURI()
         );
