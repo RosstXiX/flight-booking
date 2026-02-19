@@ -48,7 +48,7 @@ public class LoggingAspect {
         }
 
         return Arrays.stream(args)
-                .map(Object::toString)
+                .map(arg -> arg != null ? arg.toString() : "null")
                 .collect(Collectors.joining(", "));
     }
 }
