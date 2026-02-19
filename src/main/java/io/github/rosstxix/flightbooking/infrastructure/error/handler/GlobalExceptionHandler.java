@@ -3,17 +3,21 @@ package io.github.rosstxix.flightbooking.infrastructure.error.handler;
 import io.github.rosstxix.flightbooking.infrastructure.error.ErrorResponseFactory;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.ApiException;
+import io.github.rosstxix.flightbooking.infrastructure.logging.LogMessageFormatter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,7 +34,7 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest req
     ) {
-        log.error("Unexpected error occurred: {}", ex.getMessage(), ex);
+        log.error(LogMessageFormatter.handlerError(ApiErrorCode.INTERNAL_SERVER_ERROR, req, ex.getMessage()), ex);
 
         ErrorResponse response = errorResponseFactory.internalError(req.getRequestURI());
 
@@ -42,7 +46,7 @@ public class GlobalExceptionHandler {
             ApiException ex,
             HttpServletRequest request
     ) {
-        log.warn("API error [{}]: {}", ex.getErrorCode(), ex.getMessage());
+        log.warn(LogMessageFormatter.handlerError(ex.getErrorCode(), request, ex.getMessage()));
 
         ErrorResponse response = errorResponseFactory.create(
                 ex.getHttpStatus(),
@@ -59,13 +63,30 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
-        String message = ex.getBindingResult()
+        BindingResult bindingResult = ex.getBindingResult();
+
+        String message = bindingResult
                 .getFieldErrors()
                 .stream()
-                .map(error -> error.getField() + " : " + error.getDefaultMessage())
+                .sorted(Comparator.comparing(FieldError::getField))
+                .map(error -> {
+                    String field = error.getField();
+
+                    if (error.isBindingFailure()) {
+                        Class<?> expectedType = bindingResult.getFieldType(field);
+                        String typeName = expectedType != null
+                                ? expectedType.getSimpleName()
+                                : "unknown";
+
+                        return "%s : must be of type %s".formatted(field, typeName);
+                    }
+
+                    return "%s : %s".formatted(field, error.getDefaultMessage());
+
+                })
                 .collect(Collectors.joining("; "));
 
-        log.debug("Validation error: {}", message);
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
         ErrorResponse response = errorResponseFactory.validationError(
                 message,
@@ -94,7 +115,7 @@ public class GlobalExceptionHandler {
                 })
                 .collect(Collectors.joining("; "));
 
-        log.debug("Validation error: {}", message);
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
         ErrorResponse response = errorResponseFactory.validationError(
                 message,
@@ -111,17 +132,13 @@ public class GlobalExceptionHandler {
     ) {
         String field = ex.getName();
 
-        String expectedType = ex.getRequiredType() != null
+        String typeName = ex.getRequiredType() != null
                 ? ex.getRequiredType().getSimpleName()
                 : "unknown";
 
-        String actualValue = ex.getValue() != null
-                ? ex.getValue().toString()
-                : "null";
+        String message = "%s : must be of type %s".formatted(field, typeName);
 
-        String message = "%s : expected %s, but was '%s'".formatted(field, expectedType, actualValue);
-
-        log.debug("Validation error: {}", message);
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
         ErrorResponse response = errorResponseFactory.validationError(
                 message,

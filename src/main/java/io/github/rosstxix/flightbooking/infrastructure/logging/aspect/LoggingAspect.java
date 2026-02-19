@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.infrastructure.logging.aspect;
 
+import io.github.rosstxix.flightbooking.infrastructure.logging.LogMessageFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -21,8 +22,7 @@ public class LoggingAspect {
         String methodName = pjp.getSignature().getName();
         String argsFormatted = formatArgs(pjp.getArgs());
 
-        log.debug("-> {}.{}() called with args: {}",
-                simpleClassName, methodName, argsFormatted);
+        log.debug(LogMessageFormatter.enterMethod(simpleClassName, methodName, argsFormatted));
 
         long startTime = System.currentTimeMillis();
 
@@ -30,16 +30,13 @@ public class LoggingAspect {
             Object result = pjp.proceed();
             long executionTime = System.currentTimeMillis() - startTime;
 
-            log.debug("<- {}.{}() completed in {}ms",
-                    simpleClassName, methodName, executionTime);
+            log.debug(LogMessageFormatter.exitMethod(simpleClassName, methodName, executionTime));
 
             return result;
         } catch (Exception ex) {
             long executionTime = System.currentTimeMillis() - startTime;
 
-            log.debug("X {}.{}() failed after {}ms with {}: {}",
-                    simpleClassName, methodName, executionTime,
-                    ex.getClass().getSimpleName(), ex.getMessage());
+            log.debug(LogMessageFormatter.failedMethod(simpleClassName, methodName, executionTime, ex));
 
             throw ex;
         }
