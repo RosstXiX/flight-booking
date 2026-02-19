@@ -28,7 +28,7 @@ public class ErrorResponse {
             String path
     ) {
         this.status = status.value();
-        this.error = error.toString();
+        this.error = error.name();
         this.message = message;
         this.path = path;
     }
