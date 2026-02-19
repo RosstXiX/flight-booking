@@ -29,4 +29,22 @@ public class ErrorResponseFactory {
                 path
         );
     }
+
+    public ErrorResponse jwtAuthError(ApiErrorCode error, String message, String path) {
+        return new ErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                error,
+                message,
+                path
+        );
+    }
+
+    public ErrorResponse accessDeniedError(String path) {
+        return new ErrorResponse(
+                HttpStatus.FORBIDDEN,
+                ApiErrorCode.ACCESS_DENIED,
+                "Access denied",
+                path
+        );
+    }
 }

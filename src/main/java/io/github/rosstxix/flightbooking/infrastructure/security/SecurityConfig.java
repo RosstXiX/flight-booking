@@ -15,12 +15,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+
+    private final AuthenticationEntryPoint aep;
+    private final AccessDeniedHandler aeh;
+
+    public SecurityConfig(
+            AuthenticationEntryPoint authenticationEntryPoint,
+            AccessDeniedHandler accessDeniedHandler
+    ) {
+        this.aep = authenticationEntryPoint;
+        this.aeh = accessDeniedHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
@@ -38,6 +51,10 @@ class SecurityConfig {
                                 .decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter())
                         )
+                        .authenticationEntryPoint(aep)
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(aeh)
                 );
 
         return http.build();
