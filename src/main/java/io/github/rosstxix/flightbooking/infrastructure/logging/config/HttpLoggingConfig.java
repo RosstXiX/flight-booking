@@ -1,17 +1,16 @@
 package io.github.rosstxix.flightbooking.infrastructure.logging.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 public class HttpLoggingConfig {
 
     @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE + 10)
-    public CommonsRequestLoggingFilter requestLoggingFilter() {
+    public FilterRegistrationBean<CommonsRequestLoggingFilter> requestLoggingFilter() {
         CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
 
         filter.setIncludeQueryString(true); // Logging for ?from=...
@@ -20,6 +19,8 @@ public class HttpLoggingConfig {
         filter.setIncludeHeaders(false);
         filter.setAfterMessagePrefix("REQUEST DATA: [");
 
-        return filter;
+        FilterRegistrationBean<CommonsRequestLoggingFilter> bean = new FilterRegistrationBean<>(filter);
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
+        return bean;
     }
 }
