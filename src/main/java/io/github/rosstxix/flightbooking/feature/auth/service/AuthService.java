@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.auth.service;
 
 import io.github.rosstxix.flightbooking.feature.auth.dto.LoginRequest;
+import io.github.rosstxix.flightbooking.feature.auth.dto.LoginResponse;
 import io.github.rosstxix.flightbooking.infrastructure.security.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,12 +23,18 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public String login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
+
+        return new LoginResponse(
+                token,
+                "Bearer",
+                jwtService.getExpirationSeconds()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.controller;
 
+import io.github.rosstxix.flightbooking.dto.PageResponse;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -10,11 +11,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Validated
 @Tag(name = "Flights", description = "Flight management and search")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/flights")
 public class FlightController {
@@ -41,11 +43,25 @@ public class FlightController {
                     responseCode = "200", description = "Flights successfully found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = FlightSearchResponse.class)
+                            schema = @Schema(implementation = PageResponse.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "400", description = "Invalid query parameters",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "Token is missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "Access denied",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
@@ -60,11 +76,11 @@ public class FlightController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<Page<FlightSearchResponse>> searchFlights(
-            @Valid @ModelAttribute @ParameterObject FlightSearchRequest request,
+    public ResponseEntity<PageResponse<FlightSearchResponse>> searchFlights(
+            @ParameterObject @Valid @ModelAttribute FlightSearchRequest request,
             @ParameterObject Pageable pageable
     ) {
-        Page<FlightSearchResponse> flights = flightService.searchFlights(request, pageable);
+        PageResponse<FlightSearchResponse> flights = flightService.searchFlights(request, pageable);
         return ResponseEntity.ok(flights);
     }
 
@@ -82,6 +98,20 @@ public class FlightController {
             ),
             @ApiResponse(
                     responseCode = "400", description = "Invalid flight ID",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "Token is missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "Access denied",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
