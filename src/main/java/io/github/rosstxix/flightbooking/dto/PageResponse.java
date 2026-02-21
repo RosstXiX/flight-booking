@@ -5,28 +5,15 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Schema(description = "Page response wrapper")
+@Schema(name = "!!! USE ___Doc CLASS FOR OpenAPI RESPONSE INSTEAD!!!")
 public record PageResponse<T> (
 
-    @Schema(description = "Content of current page", requiredMode = Schema.RequiredMode.REQUIRED)
     List<T> content,
-
-    @Schema(example = "0", requiredMode = Schema.RequiredMode.REQUIRED)
     int page,
-
-    @Schema(example = "10", requiredMode = Schema.RequiredMode.REQUIRED)
     int size,
-
-    @Schema(example = "31", requiredMode = Schema.RequiredMode.REQUIRED)
     long totalElements,
-
-    @Schema(example = "4", requiredMode = Schema.RequiredMode.REQUIRED)
     int totalPages,
-
-    @Schema(example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     boolean first,
-
-    @Schema(example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
     boolean last
 
 ) {
