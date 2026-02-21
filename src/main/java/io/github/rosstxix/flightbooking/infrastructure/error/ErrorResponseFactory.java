@@ -39,6 +39,15 @@ public class ErrorResponseFactory {
         );
     }
 
+    public ErrorResponse loginPassAuthError(String path) {
+        return new ErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                ApiErrorCode.BAD_CREDENTIALS,
+                "Invalid login or password",
+                path
+        );
+    }
+
     public ErrorResponse accessDeniedError(String path) {
         return new ErrorResponse(
                 HttpStatus.FORBIDDEN,

@@ -15,6 +15,7 @@ public enum ApiErrorCode {
     TOKEN_EXPIRED("Token expired"),
     TOKEN_INVALID("Token invalid"),
     TOKEN_MISSING("Token missing"),
+    BAD_CREDENTIALS("Bad credentials"),
 
     // 403
     ACCESS_DENIED("Access denied"),

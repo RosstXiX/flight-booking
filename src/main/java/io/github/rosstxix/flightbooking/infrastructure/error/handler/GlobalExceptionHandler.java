@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -146,5 +147,17 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(
+            BadCredentialsException ex,
+            HttpServletRequest request
+    ) {
+        String message = ex.getMessage();
+
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.BAD_CREDENTIALS, request, message));
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseFactory.loginPassAuthError(request.getRequestURI()));
     }
 }
