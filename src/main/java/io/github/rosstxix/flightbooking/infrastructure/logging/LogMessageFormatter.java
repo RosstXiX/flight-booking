@@ -21,4 +21,12 @@ public final class LogMessageFormatter {
     public static String failedMethod(String className, String method, long ms, Exception ex) {
         return "X %s.%s() | duration=%dms error=%s".formatted(className, method, ms, ex.getClass().getSimpleName());
     }
+
+    public static String successLogin(String username) {
+        return "Login success | user=%s".formatted(username);
+    }
+
+    public static String failedLogin(String username, String reason) {
+        return "Login failed | user=%s | reason=%s".formatted(username, reason);
+    }
 }
