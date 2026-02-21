@@ -56,4 +56,13 @@ public class ErrorResponseFactory {
                 path
         );
     }
+
+    public ErrorResponse requestBodyError(ApiErrorCode error, String message, String path) {
+        return new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                error,
+                message,
+                path
+        );
+    }
 }

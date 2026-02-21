@@ -1,5 +1,7 @@
 package io.github.rosstxix.flightbooking.infrastructure.error.handler;
 
+import com.fasterxml.jackson.core.io.JsonEOFException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import io.github.rosstxix.flightbooking.infrastructure.error.ErrorResponseFactory;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.ApiException;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -159,5 +162,27 @@ public class GlobalExceptionHandler {
         log.warn(LogMessageFormatter.handlerError(ApiErrorCode.BAD_CREDENTIALS, request, message));
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseFactory.loginPassAuthError(request.getRequestURI()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex,
+            HttpServletRequest request
+    ) {
+        Throwable cause = ex.getCause();
+        ApiErrorCode code = ApiErrorCode.INVALID_REQUEST_BODY;
+        String message = "Request body is invalid";
+
+        if (cause instanceof JsonEOFException) {
+            code = ApiErrorCode.INVALID_JSON;
+            message = "Malformed JSON";
+        } else if (cause instanceof MismatchedInputException) {
+            code = ApiErrorCode.INVALID_FORMAT;
+            message = "Invalid field format in request body";
+        }
+
+        log.warn(LogMessageFormatter.handlerError(code, request, cause.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseFactory.requestBodyError(code, message, request.getRequestURI()));
     }
 }

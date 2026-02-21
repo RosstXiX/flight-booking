@@ -16,6 +16,9 @@ public enum ApiErrorCode {
     TOKEN_INVALID("Token invalid"),
     TOKEN_MISSING("Token missing"),
     BAD_CREDENTIALS("Bad credentials"),
+    INVALID_REQUEST_BODY("Invalid request body"),
+    INVALID_JSON("Malformed JSON"),
+    INVALID_FORMAT("Invalid request field format"),
 
     // 403
     ACCESS_DENIED("Access denied"),
