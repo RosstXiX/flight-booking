@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.controller;
 
 import io.github.rosstxix.flightbooking.dto.PageResponse;
+import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchPageDoc;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -43,7 +44,7 @@ public class FlightController {
                     responseCode = "200", description = "Flights successfully found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PageResponse.class)
+                            schema = @Schema(implementation = FlightSearchPageDoc.class)
                     )
             ),
             @ApiResponse(
