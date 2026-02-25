@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "airports")
 @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +31,11 @@ public class Airport {
     @Column(name = "timezone", nullable = false)
     private String timeZone;
 
+    public Airport(String code, String name, String city, String country, String timeZone) {
+        this.code = code;
+        this.name = name;
+        this.city = city;
+        this.country = country;
+        this.timeZone = timeZone;
+    }
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "aircrafts")
 @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class Aircraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,8 @@ public class Aircraft {
     @Column(name = "total_seats", nullable = false)
     private Integer totalSeats;
 
+    public Aircraft(String model, Integer totalSeats) {
+        this.model = model;
+        this.totalSeats = totalSeats;
+    }
 }

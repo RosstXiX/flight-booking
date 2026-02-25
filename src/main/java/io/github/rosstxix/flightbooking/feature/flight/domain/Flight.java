@@ -48,4 +48,13 @@ public class Flight {
     @Column(nullable = false)
     private FlightStatus status = FlightStatus.SCHEDULED;
 
+    public Flight(String flightNumber, Airport departureAirport, Airport arrivalAirport, Aircraft aircraft, Instant departureUtc, Instant arrivalUtc, BigDecimal price) {
+        this.flightNumber = flightNumber;
+        this.departureAirport = departureAirport;
+        this.arrivalAirport = arrivalAirport;
+        this.aircraft = aircraft;
+        this.departureUtc = departureUtc;
+        this.arrivalUtc = arrivalUtc;
+        this.price = price;
+    }
 }

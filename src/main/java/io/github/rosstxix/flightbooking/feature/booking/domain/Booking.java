@@ -13,7 +13,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "bookings")
 @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,12 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BookingStatus status;
+    private BookingStatus status = BookingStatus.PENDING;
 
+    public Booking(User user, Flight flight, String seatNumber, Instant bookingDate) {
+        this.user = user;
+        this.flight = flight;
+        this.seatNumber = seatNumber;
+        this.bookingDate = bookingDate;
+    }
 }
