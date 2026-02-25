@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.feature.auth.dto;
+package io.github.rosstxix.flightbooking.feature.auth.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

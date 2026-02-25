@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.auth.controller;
 
-import io.github.rosstxix.flightbooking.feature.auth.dto.LoginRequest;
-import io.github.rosstxix.flightbooking.feature.auth.dto.LoginResponse;
+import io.github.rosstxix.flightbooking.feature.auth.dto.request.LoginRequest;
+import io.github.rosstxix.flightbooking.feature.auth.dto.response.LoginResponse;
 import io.github.rosstxix.flightbooking.feature.auth.service.AuthService;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
