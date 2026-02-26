@@ -13,24 +13,31 @@ VALUES ('Boeing 737-800', 189),
        ('Embraer E190', 114);
 
 -- Flights (UTC timestamps)
--- KBP → LWO: depart 08:00 Kiev time = 06:00 UTC (winter) / 05:00 UTC (summer)
--- For simplicity, using winter time (UTC+2)
+-- For simplicity, assuming UTC+2 (no DST handling)
 INSERT INTO flights (flight_number, departure_airport_id, arrival_airport_id, aircraft_id, departure_utc, arrival_utc,
                      price, status)
 VALUES
--- Kyiv → Lviv
-('PS101', 1, 2, 1, '2026-10-20 06:00:00+00', '2026-10-20 07:15:00+00', 1500.00, 'SCHEDULED'),
-('PS102', 1, 2, 1, '2026-10-20 12:00:00+00', '2026-10-20 13:15:00+00', 1500.00, 'SCHEDULED'),
--- Lviv → Kyiv
-('PS201', 2, 1, 1, '2026-10-20 08:00:00+00', '2026-10-20 09:15:00+00', 1500.00, 'SCHEDULED'),
-('PS202', 2, 1, 1, '2026-10-20 14:00:00+00', '2026-10-20 15:15:00+00', 1500.00, 'SCHEDULED'),
--- Kyiv → Odesa
-('PS301', 1, 3, 2, '2026-10-20 09:00:00+00', '2026-10-20 10:30:00+00', 1800.00, 'SCHEDULED'),
--- Kyiv → London
-('PS401', 1, 4, 1, '2026-10-21 05:00:00+00', '2026-10-21 07:30:00+00', 5000.00, 'SCHEDULED'),
--- Kyiv → New York
-('PS501', 1, 5, 1, '2026-10-22 08:00:00+00', '2026-10-22 19:00:00+00', 12000.00, 'SCHEDULED');
+-- Kyiv -> Lviv
+('PS101', 1, 2, 1,'2026-10-20 06:00:00+00', '2026-10-20 07:15:00+00',1500.00, 'SCHEDULED'),
+('PS102', 1, 2, 1,'2026-10-20 12:00:00+00', '2026-10-20 13:15:00+00',1700.00, 'SCHEDULED'),
+-- Lviv -> Kyiv
+('PS201', 2, 1, 1,'2026-10-20 08:00:00+00', '2026-10-20 09:15:00+00',1500.00, 'SCHEDULED'),
+('PS202', 2, 1, 1,'2026-10-20 14:00:00+00', '2026-10-20 15:15:00+00',1700.00, 'SCHEDULED'),
+
+-- Kyiv -> Odesa
+('PS301', 1, 3, 2,'2026-10-20 07:00:00+00', '2026-10-20 08:30:00+00',1800.00, 'SCHEDULED'),
+-- Odesa -> Kyiv
+('PS302', 3, 1, 2,'2026-10-20 09:15:00+00', '2026-10-20 10:45:00+00',1800.00, 'SCHEDULED'),
 
 INSERT INTO users (email, password, first_name, last_name, role)
 VALUES ('admin@example.com', '$2a$10$WY/SN8/qCMcMYc.Lr8A0ceYAL9i2I5JdcyC7IYIIoQOeySs2ZRwTS', 'Admin', 'User', 'ADMIN'),
        ('user@example.com', '$2a$10$WY/SN8/qCMcMYc.Lr8A0ceYAL9i2I5JdcyC7IYIIoQOeySs2ZRwTS', 'Test', 'User', 'USER');
+-- Kyiv -> London
+('PS401', 1, 4, 3,'2026-10-21 05:00:00+00', '2026-10-21 07:30:00+00',5000.00, 'SCHEDULED'),
+-- London -> Kyiv
+('PS402', 4, 1, 3,'2026-10-21 09:00:00+00', '2026-10-21 13:30:00+00',5200.00, 'SCHEDULED'),
+
+-- Kyiv -> New York
+('PS501', 1, 5, 3,'2026-10-22 08:00:00+00', '2026-10-22 19:00:00+00',12000.00, 'SCHEDULED'),
+-- New York -> Kyiv
+('PS502', 5, 1, 3,'2026-10-23 01:00:00+00', '2026-10-23 11:00:00+00',12500.00, 'SCHEDULED');
