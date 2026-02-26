@@ -1,8 +1,8 @@
 -- Airports
 INSERT INTO airports (code, name, city, country, timezone)
-VALUES ('KBP', 'Boryspil International Airport', 'Kyiv', 'Ukraine', 'Europe/Kiev'),
-       ('LWO', 'Lviv Danylo Halytskyi International Airport', 'Lviv', 'Ukraine', 'Europe/Kiev'),
-       ('ODS', 'Odesa International Airport', 'Odesa', 'Ukraine', 'Europe/Kiev'),
+VALUES ('KBP', 'Boryspil International Airport', 'Kyiv', 'Ukraine', 'Europe/Kyiv'),
+       ('LWO', 'Lviv Danylo Halytskyi International Airport', 'Lviv', 'Ukraine', 'Europe/Kyiv'),
+       ('ODS', 'Odesa International Airport', 'Odesa', 'Ukraine', 'Europe/Kyiv'),
        ('LHR', 'London Heathrow', 'London', 'United Kingdom', 'Europe/London'),
        ('JFK', 'John F. Kennedy International Airport', 'New York', 'USA', 'America/New_York');
 
