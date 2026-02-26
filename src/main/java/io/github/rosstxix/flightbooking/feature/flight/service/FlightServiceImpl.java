@@ -1,7 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.dto.PageResponse;
-import io.github.rosstxix.flightbooking.infrastructure.logging.aspect.Loggable;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.domain.Airport;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
@@ -36,7 +35,6 @@ public class FlightServiceImpl implements FlightService {
         this.airportRepository = airportRepository;
     }
 
-    @Loggable
     @Transactional(readOnly = true)
     public PageResponse<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         // Convert LocalDate to UTC diapason for searching
@@ -63,7 +61,6 @@ public class FlightServiceImpl implements FlightService {
         return PageResponse.from(response);
     }
 
-    @Loggable
     @Transactional(readOnly = true)
     public FlightSearchResponse getFlightDetails(Long id) {
         FlightProjection projection = flightRepository.findProjectionById(id)
