@@ -17,5 +17,8 @@ public record LoginRequest (
         @Schema(description = "User password", example = "secret123", requiredMode = Schema.RequiredMode.REQUIRED)
         String password
 ) {
-
+    @Override
+    public String toString() {
+        return "LoginRequest[email=%s]".formatted(email);
+    }
 }
