@@ -26,6 +26,9 @@ public enum ApiErrorCode {
     // 404
     ENTITY_NOT_FOUND("Entity not found"),
 
+    // 409
+    CONFLICT("Conflict"),
+
     // 500
     INTERNAL_SERVER_ERROR("Unexpected error");
 
