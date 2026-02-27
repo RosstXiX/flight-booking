@@ -1,9 +1,9 @@
 package io.github.rosstxix.flightbooking.feature.booking.domain;
 
+import io.github.rosstxix.flightbooking.domain.Auditable;
 import io.github.rosstxix.flightbooking.domain.User;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.time.Instant;
 @Table(name = "bookings")
 @Getter
 @NoArgsConstructor
-public class Booking {
+public class Booking extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

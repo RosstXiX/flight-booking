@@ -2,6 +2,7 @@ package io.github.rosstxix.flightbooking.feature.flight.domain;
 
 import io.github.rosstxix.flightbooking.domain.Aircraft;
 import io.github.rosstxix.flightbooking.domain.Airport;
+import io.github.rosstxix.flightbooking.domain.Auditable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Table(name = "flights")
 @Getter
 @NoArgsConstructor @AllArgsConstructor
-public class Flight {
+public class Flight extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
