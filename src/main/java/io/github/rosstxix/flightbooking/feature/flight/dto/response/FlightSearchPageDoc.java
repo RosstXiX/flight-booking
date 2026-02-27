@@ -12,11 +12,11 @@ import java.util.List;
 )
 public final class FlightSearchPageDoc extends PageResponseDoc {
     @ArraySchema(
-            schema = @Schema(
-                    implementation = FlightSearchResponse.class,
+            schema = @Schema(implementation = FlightSearchResponse.class),
+            arraySchema = @Schema(
+                    description = "List of flight search results",
                     requiredMode = Schema.RequiredMode.REQUIRED
-            ),
-            arraySchema = @Schema(description = "List of flight search results")
+            )
     )
     public List<FlightSearchResponse> content;
 
