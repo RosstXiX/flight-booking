@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.dto.PageResponse;
+import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.domain.Airport;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
@@ -54,6 +55,7 @@ public class FlightService {
                 request.toCode(),
                 startUtc,
                 endUtc,
+                FlightStatus.SCHEDULED,
                 pageable
         );
 

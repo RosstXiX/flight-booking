@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.repository;
 
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
+import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,13 +41,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                     AND aa.code = :to
                     AND f.departureUtc >= :startUtc
                     AND f.departureUtc < :endUtc
-                    AND f.status = :#{T(io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus).SCHEDULED}
+                    AND f.status = :status
             """)
     Page<FlightProjection> searchFlights(
             @Param("from") String fromCode,
             @Param("to") String toCode,
             @Param("startUtc") Instant startUtc,
             @Param("endUtc") Instant endUtc,
+            @Param("status") FlightStatus status,
             Pageable pageable
     );
 
