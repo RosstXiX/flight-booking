@@ -35,7 +35,6 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Loggable
     public LoginResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
@@ -51,7 +50,6 @@ public class AuthService {
         );
     }
 
-    @Loggable
      public void register(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.email())) {
             throw new EmailAlreadyExistsApiException("User with email %s already exists ".formatted(registerRequest.email()));
