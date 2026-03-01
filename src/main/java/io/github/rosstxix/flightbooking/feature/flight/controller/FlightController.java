@@ -1,7 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.controller;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
-import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchPageDoc;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -41,11 +40,7 @@ public class FlightController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Flights successfully found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = FlightSearchPageDoc.class)
-                    )
+                    responseCode = "200", description = "Flights successfully found"
             ),
             @ApiResponse(
                     responseCode = "400", description = "Invalid query parameters",
