@@ -36,11 +36,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(
             Exception ex,
-            HttpServletRequest req
+            HttpServletRequest request
     ) {
-        log.error(LogMessageFormatter.handlerError(ApiErrorCode.INTERNAL_SERVER_ERROR, req, ex.getMessage()), ex);
+        log.error(LogMessageFormatter.handlerError(ApiErrorCode.INTERNAL_SERVER_ERROR, request, ex.getMessage()), ex);
 
-        ErrorResponse response = errorResponseFactory.internalError(req.getRequestURI());
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ApiErrorCode.INTERNAL_SERVER_ERROR,
+                "Unexpected error occurred",
+                request.getRequestURI()
+        );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
@@ -92,7 +97,9 @@ public class GlobalExceptionHandler {
 
         log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
-        ErrorResponse response = errorResponseFactory.validationError(
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.BAD_REQUEST,
+                ApiErrorCode.VALIDATION_ERROR,
                 message,
                 request.getRequestURI()
         );
@@ -121,7 +128,9 @@ public class GlobalExceptionHandler {
 
         log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
-        ErrorResponse response = errorResponseFactory.validationError(
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.BAD_REQUEST,
+                ApiErrorCode.VALIDATION_ERROR,
                 message,
                 request.getRequestURI()
         );
@@ -144,7 +153,9 @@ public class GlobalExceptionHandler {
 
         log.warn(LogMessageFormatter.handlerError(ApiErrorCode.VALIDATION_ERROR, request, message));
 
-        ErrorResponse response = errorResponseFactory.validationError(
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.BAD_REQUEST,
+                ApiErrorCode.VALIDATION_ERROR,
                 message,
                 request.getRequestURI()
         );
@@ -161,7 +172,14 @@ public class GlobalExceptionHandler {
 
         log.warn(LogMessageFormatter.handlerError(ApiErrorCode.BAD_CREDENTIALS, request, message));
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseFactory.loginPassAuthError(request.getRequestURI()));
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.UNAUTHORIZED,
+                ApiErrorCode.BAD_CREDENTIALS,
+                "Invalid login or password",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -183,6 +201,13 @@ public class GlobalExceptionHandler {
 
         log.warn(LogMessageFormatter.handlerError(code, request, cause.getMessage()));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseFactory.requestBodyError(code, message, request.getRequestURI()));
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.BAD_REQUEST,
+                code,
+                message,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
@@ -35,21 +36,26 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException ex
     ) throws IOException, ServletException {
-        ApiErrorCode aec = resolveErrorCode(ex);
+        ApiErrorCode code = resolveErrorCode(ex);
 
-        String message = switch (aec) {
+        String message = switch (code) {
             case ApiErrorCode.TOKEN_EXPIRED -> "JWT token has expired";
             case ApiErrorCode.TOKEN_INVALID -> "JWT token is invalid";
             case ApiErrorCode.TOKEN_MISSING -> "JWT token is missing";
             default -> "Authentication failed";
         };
 
-        ErrorResponse body = errorResponseFactory.jwtAuthError(aec, message, request.getRequestURI());
+        ErrorResponse body = errorResponseFactory.create(
+                HttpStatus.UNAUTHORIZED,
+                code,
+                message,
+                request.getRequestURI()
+        );
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        log.warn(LogMessageFormatter.handlerError(aec, request, ex.getMessage()));
+        log.warn(LogMessageFormatter.handlerError(code, request, ex.getMessage()));
 
         objectMapper.writeValue(response.getOutputStream(), body);
     }
