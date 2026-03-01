@@ -1,14 +1,14 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
-import io.github.rosstxix.flightbooking.dto.PageResponse;
+import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
-import io.github.rosstxix.flightbooking.domain.Airport;
+import io.github.rosstxix.flightbooking.feature.catalog.domain.Airport;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
 import io.github.rosstxix.flightbooking.feature.flight.mapper.FlightMapper;
-import io.github.rosstxix.flightbooking.repository.AirportRepository;
+import io.github.rosstxix.flightbooking.feature.catalog.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.feature.flight.repository.FlightRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

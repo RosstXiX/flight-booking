@@ -1,6 +1,6 @@
-package io.github.rosstxix.flightbooking.repository;
+package io.github.rosstxix.flightbooking.feature.user.repository;
 
-import io.github.rosstxix.flightbooking.domain.User;
+import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

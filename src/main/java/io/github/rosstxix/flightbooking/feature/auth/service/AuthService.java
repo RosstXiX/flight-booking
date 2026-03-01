@@ -1,13 +1,13 @@
 package io.github.rosstxix.flightbooking.feature.auth.service;
 
-import io.github.rosstxix.flightbooking.domain.User;
+import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.auth.dto.request.LoginRequest;
 import io.github.rosstxix.flightbooking.feature.auth.dto.request.RegisterRequest;
 import io.github.rosstxix.flightbooking.feature.auth.dto.response.LoginResponse;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EmailAlreadyExistsApiException;
 import io.github.rosstxix.flightbooking.infrastructure.logging.aspect.Loggable;
 import io.github.rosstxix.flightbooking.infrastructure.security.jwt.JwtService;
-import io.github.rosstxix.flightbooking.repository.UserRepository;
+import io.github.rosstxix.flightbooking.feature.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

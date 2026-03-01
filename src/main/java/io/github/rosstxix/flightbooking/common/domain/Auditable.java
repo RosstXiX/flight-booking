@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.domain;
+package io.github.rosstxix.flightbooking.common.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

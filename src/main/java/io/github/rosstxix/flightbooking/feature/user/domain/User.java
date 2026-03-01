@@ -1,5 +1,6 @@
-package io.github.rosstxix.flightbooking.domain;
+package io.github.rosstxix.flightbooking.feature.user.domain;
 
+import io.github.rosstxix.flightbooking.common.domain.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
-public class User extends Auditable{
+public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

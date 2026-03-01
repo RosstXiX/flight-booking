@@ -1,8 +1,8 @@
 package io.github.rosstxix.flightbooking.feature.flight.domain;
 
-import io.github.rosstxix.flightbooking.domain.Aircraft;
-import io.github.rosstxix.flightbooking.domain.Airport;
-import io.github.rosstxix.flightbooking.domain.Auditable;
+import io.github.rosstxix.flightbooking.feature.catalog.domain.Aircraft;
+import io.github.rosstxix.flightbooking.feature.catalog.domain.Airport;
+import io.github.rosstxix.flightbooking.common.domain.Auditable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

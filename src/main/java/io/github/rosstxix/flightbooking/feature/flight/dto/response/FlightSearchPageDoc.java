@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.dto.response;
 
-import io.github.rosstxix.flightbooking.dto.PageResponseDoc;
+import io.github.rosstxix.flightbooking.common.dto.PageResponseDoc;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 

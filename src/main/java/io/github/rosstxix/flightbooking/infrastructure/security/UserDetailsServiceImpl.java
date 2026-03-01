@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.infrastructure.security;
 
-import io.github.rosstxix.flightbooking.domain.User;
-import io.github.rosstxix.flightbooking.repository.UserRepository;
+import io.github.rosstxix.flightbooking.feature.user.domain.User;
+import io.github.rosstxix.flightbooking.feature.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

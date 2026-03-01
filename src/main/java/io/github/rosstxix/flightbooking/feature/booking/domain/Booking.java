@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.booking.domain;
 
-import io.github.rosstxix.flightbooking.domain.Auditable;
-import io.github.rosstxix.flightbooking.domain.User;
+import io.github.rosstxix.flightbooking.common.domain.Auditable;
+import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import jakarta.persistence.*;
 import lombok.Getter;

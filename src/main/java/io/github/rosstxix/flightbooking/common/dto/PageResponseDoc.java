@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.dto;
+package io.github.rosstxix.flightbooking.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

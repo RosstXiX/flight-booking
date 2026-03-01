@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.controller;
 
-import io.github.rosstxix.flightbooking.dto.PageResponse;
+import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchPageDoc;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;

@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.infrastructure.security;
 
-import io.github.rosstxix.flightbooking.domain.User;
+import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
