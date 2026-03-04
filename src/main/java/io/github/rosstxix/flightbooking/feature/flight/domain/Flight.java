@@ -15,7 +15,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "flights")
 @Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class Flight extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
