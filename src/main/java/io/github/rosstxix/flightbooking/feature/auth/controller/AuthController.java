@@ -36,7 +36,7 @@ public class AuthController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Flight details successfully retrieved",
+                    responseCode = "200", description = "Login successful",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = LoginResponse.class)
