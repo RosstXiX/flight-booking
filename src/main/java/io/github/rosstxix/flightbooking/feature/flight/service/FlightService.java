@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
+import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.feature.catalog.domain.Airport;
@@ -56,6 +57,7 @@ public class FlightService {
                 startUtc,
                 endUtc,
                 FlightStatus.SCHEDULED,
+                BookingStatus.CONFIRMED,
                 pageable
         );
 
@@ -65,7 +67,9 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public FlightSearchResponse getFlightDetails(Long id) {
-        FlightProjection projection = flightRepository.findProjectionById(id)
+        FlightProjection projection = flightRepository.findProjectionById(
+                        id,
+                        BookingStatus.CONFIRMED)
                 .orElseThrow(() ->
                     new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
                 );

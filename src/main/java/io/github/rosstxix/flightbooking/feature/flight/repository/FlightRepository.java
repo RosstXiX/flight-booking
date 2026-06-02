@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.flight.repository;
 
+import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
@@ -32,23 +33,43 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                     f.arrivalUtc AS arrivalUtc,
             
                     ac.model AS aircraftModel,
-                    ac.totalSeats AS totalSeats
+                    ac.totalSeats AS totalSeats,
+                    ac.totalSeats - COUNT(b.id) AS availableSeats
                 FROM Flight f
                     JOIN f.departureAirport da
                     JOIN f.arrivalAirport aa
                     JOIN f.aircraft ac
+                    LEFT JOIN Booking b
+                        ON b.flight = f
+                        AND b.status = :bookingStatus
                 WHERE da.code = :from
                     AND aa.code = :to
                     AND f.departureUtc >= :startUtc
                     AND f.departureUtc < :endUtc
-                    AND f.status = :status
+                    AND f.status = :flightStatus
+                GROUP BY
+                        f.id,
+                        f.flightNumber,
+                        f.price,
+                        f.status,
+                        da.code,
+                        da.city,
+                        da.timeZone,
+                        f.departureUtc,
+                        aa.code,
+                        aa.city,
+                        aa.timeZone,
+                        f.arrivalUtc,
+                        ac.model,
+                        ac.totalSeats
             """)
     Page<FlightProjection> searchFlights(
             @Param("from") String fromCode,
             @Param("to") String toCode,
             @Param("startUtc") Instant startUtc,
             @Param("endUtc") Instant endUtc,
-            @Param("status") FlightStatus status,
+            @Param("flightStatus") FlightStatus flightStatus,
+            @Param("bookingStatus") BookingStatus bookingStatus,
             Pageable pageable
     );
 
@@ -70,12 +91,34 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                     f.arrivalUtc AS arrivalUtc,
             
                     ac.model AS aircraftModel,
-                    ac.totalSeats AS totalSeats
+                    ac.totalSeats AS totalSeats,
+                    ac.totalSeats - COUNT(b.id) AS availableSeats
                 FROM Flight f
                     JOIN f.departureAirport da
                     JOIN f.arrivalAirport aa
                     JOIN f.aircraft ac
+                    LEFT JOIN Booking b
+                        ON b.flight = f
+                        AND b.status = :bookingStatus
                 WHERE f.id = :id
+                GROUP BY
+                        f.id,
+                        f.flightNumber,
+                        f.price,
+                        f.status,
+                        da.code,
+                        da.city,
+                        da.timeZone,
+                        f.departureUtc,
+                        aa.code,
+                        aa.city,
+                        aa.timeZone,
+                        f.arrivalUtc,
+                        ac.model,
+                        ac.totalSeats
             """)
-    Optional<FlightProjection> findProjectionById(@Param("id") Long id);
+    Optional<FlightProjection> findProjectionById(
+            @Param("id") Long id,
+            @Param("bookingStatus") BookingStatus bookingStatus
+    );
 }

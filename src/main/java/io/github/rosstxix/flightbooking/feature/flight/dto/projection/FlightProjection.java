@@ -25,6 +25,6 @@ public interface FlightProjection {
     // Aircraft entity
     String getAircraftModel();
     Integer getTotalSeats();
-
+    Integer getAvailableSeats();
 
 }

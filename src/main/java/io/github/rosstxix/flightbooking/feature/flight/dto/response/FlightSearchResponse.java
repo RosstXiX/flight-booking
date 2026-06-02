@@ -27,6 +27,8 @@ public record FlightSearchResponse(
         String aircraftModel,
         @Schema(description = "Total number of seats on the aircraft", example = "189", requiredMode = Schema.RequiredMode.REQUIRED)
         Integer totalSeats,
+        @Schema(description = "Number of available seats", example = "25", requiredMode = Schema.RequiredMode.REQUIRED)
+        Integer availableSeats,
         @Schema(example = "1500.00", requiredMode = Schema.RequiredMode.REQUIRED)
         BigDecimal price,
         @Schema(example = "SCHEDULED", requiredMode = Schema.RequiredMode.REQUIRED)
