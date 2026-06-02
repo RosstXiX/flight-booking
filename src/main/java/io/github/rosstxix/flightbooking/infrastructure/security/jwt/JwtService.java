@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.infrastructure.security.jwt;
 
+import io.github.rosstxix.flightbooking.infrastructure.security.SecurityUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -38,6 +39,7 @@ public class JwtService {
                 .issuedAt(now)
                 .expiresAt(now.plusMillis(jwtProperties.expiration()))
                 .subject(userDetails.getUsername())
+                .claim("userId", ((SecurityUser) userDetails).getId())
                 .claim("roles", roles)
                 .build();
 
