@@ -3,7 +3,7 @@ package io.github.rosstxix.flightbooking.feature.flight.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Schema(description = "Flight search result")
 public record FlightSearchResponse(
@@ -20,9 +20,9 @@ public record FlightSearchResponse(
         @Schema(example = "Lviv", requiredMode = Schema.RequiredMode.REQUIRED)
         String arrivalAirportCity,
         @Schema(description = "Date and time of departure taking into account timezone", example = "2026-02-20T08:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime departureLocalTime,  // Local time of departure airport
+        ZonedDateTime departureLocalTime,  // Local time of departure airport
         @Schema(description = "Date and time of arrival taking into account timezone", example = "2026-02-20T09:15:00", requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime arrivalLocalTime,    // Local time of arrival airport
+        ZonedDateTime arrivalLocalTime,    // Local time of arrival airport
         @Schema(example = "Boeing 737-800", requiredMode = Schema.RequiredMode.REQUIRED)
         String aircraftModel,
         @Schema(description = "Total number of seats on the aircraft", example = "189", requiredMode = Schema.RequiredMode.REQUIRED)

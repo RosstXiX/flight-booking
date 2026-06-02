@@ -5,10 +5,7 @@ import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearch
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 
 @Mapper(componentModel = "spring")
 public interface FlightMapper {
@@ -31,8 +28,8 @@ public interface FlightMapper {
     )
     FlightSearchResponse toSearchResponse(FlightProjection projection);
 
-    default LocalDateTime toLocal(Instant instant, String timeZone) {
-        return LocalDateTime.ofInstant(instant, ZoneId.of(timeZone));
+    default ZonedDateTime toLocal(Instant instant, String timeZone) {
+        return ZonedDateTime.ofInstant(instant, ZoneId.of(timeZone));
     }
 
     default Long calculateDuration(Instant departure, Instant arrival) {
