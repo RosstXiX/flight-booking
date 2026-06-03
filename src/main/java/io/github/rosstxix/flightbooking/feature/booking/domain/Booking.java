@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 
 @Entity
 @Table(name = "bookings")
@@ -30,17 +28,13 @@ public class Booking extends Auditable{
     @Column(name = "seat_number", nullable = false)
     private String seatNumber;  // "17B", "3C" etc
 
-    @Column(name = "booking_date", nullable = false)
-    private Instant bookingDate;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookingStatus status = BookingStatus.PENDING;
 
-    public Booking(User user, Flight flight, String seatNumber, Instant bookingDate) {
+    public Booking(User user, Flight flight, String seatNumber) {
         this.user = user;
         this.flight = flight;
         this.seatNumber = seatNumber;
-        this.bookingDate = bookingDate;
     }
 }
