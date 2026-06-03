@@ -10,6 +10,7 @@ public interface FlightProjection {
     String getFlightNumber();
     BigDecimal getPrice();
     FlightStatus getStatus();
+    String getCurrency();
 
     // Airport entity
     String getDepartureAirportCode();

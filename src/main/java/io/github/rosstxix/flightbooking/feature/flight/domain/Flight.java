@@ -3,8 +3,8 @@ package io.github.rosstxix.flightbooking.feature.flight.domain;
 import io.github.rosstxix.flightbooking.feature.catalog.domain.Aircraft;
 import io.github.rosstxix.flightbooking.feature.catalog.domain.Airport;
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
+import io.github.rosstxix.flightbooking.infrastructure.error.exception.NoSeatsAvailableApiException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +16,7 @@ import java.time.Instant;
 @Table(name = "flights")
 @Getter
 @NoArgsConstructor
-public class Flight extends Auditable{
+public class Flight extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,7 +49,18 @@ public class Flight extends Auditable{
     @Column(nullable = false)
     private FlightStatus status = FlightStatus.SCHEDULED;
 
-    public Flight(String flightNumber, Airport departureAirport, Airport arrivalAirport, Aircraft aircraft, Instant departureUtc, Instant arrivalUtc, BigDecimal price) {
+    @Column(name = "available_seats", nullable = false)
+    private Integer availableSeats;
+
+    @Column(nullable = false, length = 3)
+    private String currency;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
+    public Flight(String flightNumber, Airport departureAirport, Airport arrivalAirport, Aircraft aircraft,
+                  Instant departureUtc, Instant arrivalUtc, BigDecimal price, Integer availableSeats, String currency) {
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
@@ -57,5 +68,18 @@ public class Flight extends Auditable{
         this.departureUtc = departureUtc;
         this.arrivalUtc = arrivalUtc;
         this.price = price;
+        this.availableSeats = availableSeats;
+        this.currency = currency;
+    }
+
+    public void decrementAvailableSeats() {
+        if (availableSeats <= 0) {
+            throw new NoSeatsAvailableApiException("Flight %d has no available seats".formatted(this.id));
+        }
+        this.availableSeats--;
+    }
+
+    public void incrementAvailableSeats() {
+        this.availableSeats++;
     }
 }

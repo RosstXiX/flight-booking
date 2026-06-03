@@ -31,6 +31,8 @@ public record FlightSearchResponse(
         Integer availableSeats,
         @Schema(example = "1500.00", requiredMode = Schema.RequiredMode.REQUIRED)
         BigDecimal price,
+        @Schema(example = "USD", requiredMode = Schema.RequiredMode.REQUIRED)
+        String currency,
         @Schema(example = "SCHEDULED", requiredMode = Schema.RequiredMode.REQUIRED)
         String status,
         @Schema(example = "75", requiredMode = Schema.RequiredMode.REQUIRED)

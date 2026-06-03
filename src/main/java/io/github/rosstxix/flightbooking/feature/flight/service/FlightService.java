@@ -57,7 +57,6 @@ public class FlightService {
                 startUtc,
                 endUtc,
                 FlightStatus.SCHEDULED,
-                BookingStatus.CONFIRMED,
                 pageable
         );
 
@@ -67,9 +66,7 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public FlightSearchResponse getFlightDetails(Long id) {
-        FlightProjection projection = flightRepository.findProjectionById(
-                        id,
-                        BookingStatus.CONFIRMED)
+        FlightProjection projection = flightRepository.findProjectionById(id)
                 .orElseThrow(() ->
                     new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
                 );
