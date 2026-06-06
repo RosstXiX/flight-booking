@@ -22,10 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -281,10 +278,10 @@ class FlightServiceTest {
                 1L, "PS101",
                 "KBP", "Kyiv",
                 "LWO", "Lviv",
-                LocalDateTime.of(2026, 10, 20, 8, 0),
-                LocalDateTime.of(2026, 10, 20, 9, 15),
-                "Boeing 737-800", 189,
-                new BigDecimal("1500.00"), "SCHEDULED", 75L
+                ZonedDateTime.of(LocalDateTime.of(2026, 10, 20, 8, 0), ZoneId.of("Europe/Kyiv")),
+                ZonedDateTime.of(LocalDateTime.of(2026, 10, 20, 9, 15), ZoneId.of("Europe/Kyiv")),
+                "Boeing 737-800", 189, 189,
+                new BigDecimal("1500.00"), "USD", "SCHEDULED", 75L
         );
     }
 
