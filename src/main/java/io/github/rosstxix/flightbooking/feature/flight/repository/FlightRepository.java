@@ -3,6 +3,7 @@ package io.github.rosstxix.flightbooking.feature.flight.repository;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
+import io.github.rosstxix.flightbooking.feature.flight.dto.projection.SeatMapInfoProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -82,4 +83,20 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                 WHERE f.id = :id
             """)
     Optional<FlightProjection> findProjectionById(@Param("id") Long id);
+
+    @Query("""
+            SELECT
+                  ac.model AS aircraftModel,
+                  ac.totalSeats AS totalSeats,
+                  ac.seatLayout AS seatLayout,
+                  ac.rows AS rows,
+                  ac.seatPerRow AS seatPerRow,
+                  ac.premiumSeatLayout AS premiumSeatLayout,
+                  ac.premiumRows AS premiumRows,
+                  ac.seatPerPremiumRow AS seatPerPremiumRow
+            FROM Flight f
+                  JOIN f.aircraft ac
+            WHERE f.id = :id
+            """)
+    Optional<SeatMapInfoProjection> findSeatMapInfoProjection(@Param("id") Long id);
 }

@@ -1,6 +1,8 @@
 package io.github.rosstxix.flightbooking.feature.flight.controller;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
+import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapResponse;
+import io.github.rosstxix.flightbooking.feature.flight.service.SeatMapService;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -29,9 +31,11 @@ import org.springframework.web.bind.annotation.*;
 public class FlightController {
 
     private final FlightService flightService;
+    private final SeatMapService seatMapService;
 
-    public FlightController(FlightService flightService) {
+    public FlightController(FlightService flightService, SeatMapService seatMapService) {
         this.flightService = flightService;
+        this.seatMapService = seatMapService;
     }
 
     @Operation(
@@ -130,5 +134,13 @@ public class FlightController {
     ) {
         FlightSearchResponse flight = flightService.getFlightDetails(id);
         return ResponseEntity.ok(flight);
+    }
+
+    @GetMapping("/{id}/seats")
+    public ResponseEntity<SeatMapResponse> getSeatMap(
+            @PathVariable
+            Long id
+    ) {
+        return ResponseEntity.ok(seatMapService.getSeatMap(id));
     }
 }
