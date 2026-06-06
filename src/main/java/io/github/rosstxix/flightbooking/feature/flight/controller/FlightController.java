@@ -136,9 +136,52 @@ public class FlightController {
         return ResponseEntity.ok(flight);
     }
 
+    @Operation(
+            summary = "Get seat map",
+            description = "Provides information about seat assignments and seat availability"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Information about seats successfully retrieved",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SeatMapResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "Invalid flight ID",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "Token is missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "Access denied",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Flight with the specified ID was not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    })
     @GetMapping("/{id}/seats")
     public ResponseEntity<SeatMapResponse> getSeatMap(
             @PathVariable
+            @Parameter(example = "5", required = true)
+            @Positive(message = "Flight id must be greater than zero")
             Long id
     ) {
         return ResponseEntity.ok(seatMapService.getSeatMap(id));
