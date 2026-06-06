@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SeatMapService {
@@ -38,8 +39,7 @@ public class SeatMapService {
         int premiumSeatPerRow = projection.getSeatPerPremiumRow();
         String premiumSeatLayout = projection.getPremiumSeatLayout().replace("_", "");
 
-        List<String> occupiedSeats = bookingRepository.findOccupiedSeatNumbersByFlightId(id);
-
+        Set<String> occupiedSeats = bookingRepository.findOccupiedSeatNumbersByFlightId(id);
 
         List<SeatRowDTO> seatRows = new ArrayList<>();
         proceedSeatRows(seatRows, premiumRows, 0, premiumSeatPerRow, premiumSeatLayout, occupiedSeats, true);
@@ -61,7 +61,7 @@ public class SeatMapService {
             int startRow,
             int seatPerRow,
             String seatLayout,
-            List<String> occupiedSeats,
+            Set<String> occupiedSeats,
             boolean isPremium
     ) {
 
