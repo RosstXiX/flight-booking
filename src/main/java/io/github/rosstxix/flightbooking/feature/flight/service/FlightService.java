@@ -41,12 +41,11 @@ public class FlightService {
     public PageResponse<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         // Convert LocalDate to UTC diapason for searching
 
-        Airport departureAirport = airportRepository.findByCode(request.fromCode())
-                .orElseThrow(() ->
-                    new EntityNotFoundApiException("Airport with code %s not found".formatted(request.fromCode()))
-                );
-
-        ZoneId zone = ZoneId.of(departureAirport.getTimeZone());
+        ZoneId zone = ZoneId.of(
+                airportRepository.findTimeZoneByCode(request.fromCode()).orElseThrow(
+                        () -> new EntityNotFoundApiException("Airport with code %s not found".formatted(request.toCode()))
+                )
+        );
 
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
         Instant endUtc = request.date().plusDays(1).atStartOfDay(zone).toInstant();
