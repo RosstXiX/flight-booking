@@ -1,8 +1,8 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
-import io.github.rosstxix.flightbooking.feature.catalog.domain.Airport;
-import io.github.rosstxix.flightbooking.feature.catalog.repository.AirportRepository;
+import io.github.rosstxix.flightbooking.feature.catalog.airport.domain.Airport;
+import io.github.rosstxix.flightbooking.feature.catalog.airport.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;

@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.feature.catalog.domain;
+package io.github.rosstxix.flightbooking.feature.catalog.aircraft.domain;
 
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
 import jakarta.persistence.*;
