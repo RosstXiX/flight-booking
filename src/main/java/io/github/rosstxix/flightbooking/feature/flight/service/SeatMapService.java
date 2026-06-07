@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
+import io.github.rosstxix.flightbooking.feature.booking.service.BookingService;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatDTO;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatRowDTO;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.SeatMapInfoProjection;
@@ -17,14 +18,14 @@ import java.util.Set;
 public class SeatMapService {
 
     private final FlightRepository flightRepository;
-    private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
 
     public SeatMapService(
             FlightRepository flightRepository,
-            BookingRepository bookingRepository
+            BookingService bookingService
     ) {
         this.flightRepository = flightRepository;
-        this.bookingRepository = bookingRepository;
+        this.bookingService = bookingService;
     }
 
     public SeatMapResponse getSeatMap(Long id) {
@@ -39,7 +40,7 @@ public class SeatMapService {
         int premiumSeatPerRow = projection.getSeatPerPremiumRow();
         String premiumSeatLayout = projection.getPremiumSeatLayout().replace("_", "");
 
-        Set<String> occupiedSeats = bookingRepository.findOccupiedSeatNumbersByFlightId(id);
+        Set<String> occupiedSeats = bookingService.getOccupiedSeatNumbers(id);
 
         List<SeatRowDTO> seatRows = new ArrayList<>();
         proceedSeatRows(seatRows, premiumRows, 0, premiumSeatPerRow, premiumSeatLayout, occupiedSeats, true);
