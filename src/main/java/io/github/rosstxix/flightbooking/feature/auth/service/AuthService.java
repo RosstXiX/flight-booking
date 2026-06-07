@@ -8,12 +8,14 @@ import io.github.rosstxix.flightbooking.infrastructure.error.exception.EmailAlre
 import io.github.rosstxix.flightbooking.infrastructure.logging.aspect.Loggable;
 import io.github.rosstxix.flightbooking.infrastructure.security.jwt.JwtService;
 import io.github.rosstxix.flightbooking.feature.user.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Loggable
@@ -50,9 +52,10 @@ public class AuthService {
         );
     }
 
+    @Transactional
      public void register(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.email())) {
-            throw new EmailAlreadyExistsApiException("User with email %s already exists ".formatted(registerRequest.email()));
+            throw new EmailAlreadyExistsApiException("User with email %s already exists".formatted(registerRequest.email()));
         }
 
         User user = new User(
@@ -61,6 +64,12 @@ public class AuthService {
                 registerRequest.firstName(),
                 registerRequest.lastName()
         );
-        userRepository.save(user);
+
+        try {
+            userRepository.saveAndFlush(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new EmailAlreadyExistsApiException("User with email %s already exists".formatted(registerRequest.email()));
+        }
+
      }
 }
