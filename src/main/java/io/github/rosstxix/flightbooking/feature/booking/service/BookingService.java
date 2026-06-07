@@ -1,5 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.booking.service;
 
+import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
 import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ public class BookingService {
 
     @Transactional(readOnly = true)
     public Set<String> getOccupiedSeatNumbers(Long id) {
-        return bookingRepository.findOccupiedSeatNumbersByFlightId(id);
+        return bookingRepository.findOccupiedSeatNumbersByFlightId(
+                id, BookingStatus.CANCELLED
+        );
     }
 }

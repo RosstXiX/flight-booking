@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.booking.repository;
 
 import io.github.rosstxix.flightbooking.feature.booking.domain.Booking;
+import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                   b.seatNumber
             FROM Booking b
             WHERE b.flight.id = :flightId
-                 AND b.status <> 'CANCELLED'
+                 AND b.status <> :exceptStatus
             """)
-    Set<String> findOccupiedSeatNumbersByFlightId(@Param("flightId") Long flightId);}
+    Set<String> findOccupiedSeatNumbersByFlightId(
+            @Param("flightId") Long flightId,
+            @Param("exceptStatus") BookingStatus exceptStatus
+    );
+
+}
