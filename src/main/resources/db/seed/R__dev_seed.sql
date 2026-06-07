@@ -70,3 +70,14 @@ VALUES ('admin@example.com', '$2a$10$WY/SN8/qCMcMYc.Lr8A0ceYAL9i2I5JdcyC7IYIIoQO
         '2026-02-26 21:00:00+00', '2026-02-26 21:00:00+00'),
        ('user@example.com', '$2a$10$WY/SN8/qCMcMYc.Lr8A0ceYAL9i2I5JdcyC7IYIIoQOeySs2ZRwTS', 'Test', 'User', 'USER',
         '2026-02-26 21:00:00+00', '2026-02-26 21:00:00+00');
+
+INSERT INTO bookings (user_id, flight_id, seat_number, status, created_at, updated_at)
+VALUES
+    (1, 1, '1A', 'CANCELLED', '2026-02-26 21:00:00+00', '2026-02-26 21:00:00+00'),
+    (2, 1, '1B', 'CONFIRMED', '2026-02-26 21:00:00+00', '2026-02-26 21:00:00+00'),
+
+    (1, 2, '3B', 'CONFIRMED', '2026-02-27 12:00:00+00', '2026-02-27 12:00:00+00'),
+    (2, 2, '10C', 'CONFIRMED', '2026-02-27 13:00:00+00', '2026-02-27 13:00:00+00'),
+
+    (2, 3, '1D', 'CANCELLED', '2026-02-28 08:00:00+00', '2026-02-28 08:00:00+00'),
+    (1, 3, '1D', 'CONFIRMED', '2026-02-28 09:00:00+00', '2026-02-28 09:00:00+00');
