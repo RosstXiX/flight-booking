@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
+import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
@@ -23,27 +24,23 @@ import java.time.ZoneId;
 public class FlightService {
     private final FlightRepository flightRepository;
     private final FlightMapper flightMapper;
-    private final AirportRepository airportRepository;
+    private final AirportService airportService;
 
     public FlightService(
             FlightRepository flightRepository,
             FlightMapper flightMapper,
-            AirportRepository airportRepository
+            AirportService airportService
     ) {
         this.flightRepository = flightRepository;
         this.flightMapper = flightMapper;
-        this.airportRepository = airportRepository;
+        this.airportService = airportService;
     }
 
     @Transactional(readOnly = true)
     public PageResponse<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         // Convert LocalDate to UTC diapason for searching
 
-        ZoneId zone = ZoneId.of(
-                airportRepository.findTimeZoneByCode(request.fromCode()).orElseThrow(
-                        () -> new EntityNotFoundApiException("Airport with code %s not found".formatted(request.fromCode()))
-                )
-        );
+        ZoneId zone = ZoneId.of(airportService.findTimeZoneByCode(request.fromCode()));
 
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
         Instant endUtc = request.date().plusDays(1).atStartOfDay(zone).toInstant();
