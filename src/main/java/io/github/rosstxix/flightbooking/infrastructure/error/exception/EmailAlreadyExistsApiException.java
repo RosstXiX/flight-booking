@@ -7,7 +7,7 @@ public class EmailAlreadyExistsApiException extends ApiException {
 
     public EmailAlreadyExistsApiException(String message) {
         super(
-                ApiErrorCode.CONFLICT,
+                ApiErrorCode.EMAIL_ALREADY_EXISTS,
                 HttpStatus.CONFLICT,
                 message
         );

@@ -27,7 +27,7 @@ public enum ApiErrorCode {
     ENTITY_NOT_FOUND("Entity not found"),
 
     // 409
-    CONFLICT("Conflict"),
+    EMAIL_ALREADY_EXISTS("Email already exists"),
 
     // 500
     INTERNAL_SERVER_ERROR("Unexpected error");
