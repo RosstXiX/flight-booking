@@ -2,6 +2,8 @@ package io.github.rosstxix.flightbooking.feature.booking.controller;
 
 import io.github.rosstxix.flightbooking.feature.booking.dto.request.BookingCreateRequest;
 import io.github.rosstxix.flightbooking.feature.booking.service.BookingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +22,7 @@ public class BookingController {
     }
 
     @PostMapping("/create")
-    public void createBooking(
+    public ResponseEntity<Void> createBooking(
             @AuthenticationPrincipal Jwt jwt,
             @RequestBody BookingCreateRequest request
     ) {
@@ -29,5 +31,6 @@ public class BookingController {
                 request.flightId(),
                 request.seatNumber()
         );
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
