@@ -2,13 +2,13 @@ package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
+import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
 import io.github.rosstxix.flightbooking.feature.flight.mapper.FlightMapper;
-import io.github.rosstxix.flightbooking.feature.catalog.airport.repository.AirportRepository;
 import io.github.rosstxix.flightbooking.feature.flight.repository.FlightRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -62,10 +62,17 @@ public class FlightService {
     public FlightSearchResponse getFlightDetails(Long id) {
         FlightProjection projection = flightRepository.findProjectionById(id)
                 .orElseThrow(() ->
-                    new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
+                        new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
                 );
 
         return flightMapper.toSearchResponse(projection);
+    }
+
+    @Transactional
+    public Flight getFlightByIdForUpdate(Long id) {
+        return flightRepository.findByIdWithLock(id).orElseThrow(
+                () -> new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
+        );
     }
 
 }

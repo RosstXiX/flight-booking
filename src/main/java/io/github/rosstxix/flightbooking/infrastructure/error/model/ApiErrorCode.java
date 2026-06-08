@@ -28,7 +28,9 @@ public enum ApiErrorCode {
 
     // 409
     EMAIL_ALREADY_EXISTS("Email already exists"),
+    SEAT_ALREADY_BOOKED("Seat already booked"),
     NO_SEATS_AVAILABLE("No seats available on this flight"),
+    INVALID_BOOKING_STATE("Booking state transition is not allowed"),
 
     // 500
     INTERNAL_SERVER_ERROR("Unexpected error");

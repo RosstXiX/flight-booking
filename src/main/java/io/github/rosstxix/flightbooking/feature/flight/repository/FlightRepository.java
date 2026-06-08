@@ -4,9 +4,11 @@ import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.SeatMapInfoProjection;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -99,4 +101,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             WHERE f.id = :id
             """)
     Optional<SeatMapInfoProjection> findSeatMapInfoProjection(@Param("id") Long id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT f FROM Flight f WHERE f.id = :id")
+    Optional<Flight> findByIdWithLock(@Param("id") Long id);
 }
