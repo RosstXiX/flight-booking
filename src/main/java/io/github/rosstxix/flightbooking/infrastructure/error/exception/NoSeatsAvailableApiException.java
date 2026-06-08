@@ -7,7 +7,7 @@ public class NoSeatsAvailableApiException extends ApiException {
 
     public NoSeatsAvailableApiException(String message) {
         super(
-                ApiErrorCode.CONFLICT,
+                ApiErrorCode.NO_SEATS_AVAILABLE,
                 HttpStatus.CONFLICT,
                 message
         );

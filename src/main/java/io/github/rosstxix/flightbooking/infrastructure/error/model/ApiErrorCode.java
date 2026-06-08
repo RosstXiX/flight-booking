@@ -28,6 +28,7 @@ public enum ApiErrorCode {
 
     // 409
     EMAIL_ALREADY_EXISTS("Email already exists"),
+    NO_SEATS_AVAILABLE("No seats available on this flight"),
 
     // 500
     INTERNAL_SERVER_ERROR("Unexpected error");
