@@ -55,9 +55,6 @@ public class Flight extends Auditable {
     @Column(nullable = false, length = 3)
     private String currency;
 
-    @Version
-    @Column(nullable = false)
-    private Long version;
 
     public Flight(String flightNumber, Airport departureAirport, Airport arrivalAirport, Aircraft aircraft,
                   Instant departureUtc, Instant arrivalUtc, BigDecimal price, Integer availableSeats, String currency) {
