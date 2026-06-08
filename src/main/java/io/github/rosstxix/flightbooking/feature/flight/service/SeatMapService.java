@@ -1,6 +1,5 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
-import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
 import io.github.rosstxix.flightbooking.feature.booking.service.BookingService;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatDTO;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatRowDTO;
@@ -9,6 +8,7 @@ import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapRespo
 import io.github.rosstxix.flightbooking.feature.flight.repository.FlightRepository;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class SeatMapService {
         this.bookingService = bookingService;
     }
 
+    @Transactional(readOnly = true)
     public SeatMapResponse getSeatMap(Long id) {
         SeatMapInfoProjection projection = flightRepository.findSeatMapInfoProjection(id).orElseThrow(
                 () -> new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
