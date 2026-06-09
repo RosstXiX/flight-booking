@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.infrastructure.security.jwt;
 
-import io.github.rosstxix.flightbooking.infrastructure.security.SecurityUser;
+import io.github.rosstxix.flightbooking.infrastructure.security.userdetails.SecurityUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

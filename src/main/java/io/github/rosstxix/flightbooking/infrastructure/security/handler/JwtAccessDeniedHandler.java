@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.infrastructure.security;
+package io.github.rosstxix.flightbooking.infrastructure.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rosstxix.flightbooking.infrastructure.error.ErrorResponseFactory;

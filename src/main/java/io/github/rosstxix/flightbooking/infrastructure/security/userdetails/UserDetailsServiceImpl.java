@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.infrastructure.security;
+package io.github.rosstxix.flightbooking.infrastructure.security.userdetails;
 
 import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.user.repository.UserRepository;
