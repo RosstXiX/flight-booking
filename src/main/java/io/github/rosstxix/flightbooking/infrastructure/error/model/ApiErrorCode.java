@@ -32,6 +32,9 @@ public enum ApiErrorCode {
     NO_SEATS_AVAILABLE("No seats available on this flight"),
     INVALID_BOOKING_STATE("Booking state transition is not allowed"),
 
+    // 422
+    SEAT_DOES_NOT_EXIST("Seat does not exist"),
+
     // 500
     INTERNAL_SERVER_ERROR("Unexpected error");
 

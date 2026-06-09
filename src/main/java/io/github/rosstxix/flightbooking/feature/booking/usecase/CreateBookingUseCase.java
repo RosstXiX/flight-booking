@@ -44,6 +44,8 @@ public class CreateBookingUseCase {
         );
         flight.decrementAvailableSeats();
 
+        flight.getAircraft().validateSeat(seatNumber);
+
         Booking booking = new Booking(
                 userRepository.findById(userId).orElseThrow(
                         () -> new EntityNotFoundApiException("user with id %d not found".formatted(userId))
