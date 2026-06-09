@@ -24,7 +24,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+public class SecurityConfig {
 
     private final AuthenticationEntryPoint aep;
     private final AccessDeniedHandler aeh;
