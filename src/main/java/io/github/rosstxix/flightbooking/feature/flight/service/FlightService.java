@@ -68,11 +68,4 @@ public class FlightService {
         return flightMapper.toSearchResponse(projection);
     }
 
-    @Transactional
-    public Flight getFlightByIdForUpdate(Long id) {
-        return flightRepository.findByIdWithLock(id).orElseThrow(
-                () -> new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
-        );
-    }
-
 }

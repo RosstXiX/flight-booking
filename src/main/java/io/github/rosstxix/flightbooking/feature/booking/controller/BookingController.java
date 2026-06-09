@@ -1,7 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.booking.controller;
 
 import io.github.rosstxix.flightbooking.feature.booking.dto.request.BookingCreateRequest;
-import io.github.rosstxix.flightbooking.feature.booking.service.BookingService;
+import io.github.rosstxix.flightbooking.feature.booking.usecase.CreateBookingUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-    private final BookingService bookingService;
+    private final CreateBookingUseCase createBookingUseCase;
 
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public BookingController(CreateBookingUseCase createBookingUseCase) {
+        this.createBookingUseCase = createBookingUseCase;
     }
 
     @PostMapping("/create")
@@ -26,7 +26,7 @@ public class BookingController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestBody BookingCreateRequest request
     ) {
-        bookingService.createBooking(
+        createBookingUseCase.execute(
                 (Long) jwt.getClaims().get("userId"),
                 request.flightId(),
                 request.seatNumber()
