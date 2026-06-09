@@ -2,7 +2,7 @@ package io.github.rosstxix.flightbooking.feature.flight.controller;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapResponse;
-import io.github.rosstxix.flightbooking.feature.flight.service.SeatMapService;
+import io.github.rosstxix.flightbooking.feature.flight.usecase.GetSeatMapUseCase;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -31,11 +31,11 @@ import org.springframework.web.bind.annotation.*;
 public class FlightController {
 
     private final FlightService flightService;
-    private final SeatMapService seatMapService;
+    private final GetSeatMapUseCase getSeatMapUseCase;
 
-    public FlightController(FlightService flightService, SeatMapService seatMapService) {
+    public FlightController(FlightService flightService, GetSeatMapUseCase getSeatMapUseCase) {
         this.flightService = flightService;
-        this.seatMapService = seatMapService;
+        this.getSeatMapUseCase = getSeatMapUseCase;
     }
 
     @Operation(
@@ -184,6 +184,6 @@ public class FlightController {
             @Positive(message = "Flight id must be greater than zero")
             Long id
     ) {
-        return ResponseEntity.ok(seatMapService.getSeatMap(id));
+        return ResponseEntity.ok(getSeatMapUseCase.execute(id));
     }
 }

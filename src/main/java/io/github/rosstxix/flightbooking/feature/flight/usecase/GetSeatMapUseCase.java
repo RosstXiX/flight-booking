@@ -1,35 +1,36 @@
-package io.github.rosstxix.flightbooking.feature.flight.service;
+package io.github.rosstxix.flightbooking.feature.flight.usecase;
 
-import io.github.rosstxix.flightbooking.feature.booking.service.BookingService;
+import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
+import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatDTO;
 import io.github.rosstxix.flightbooking.feature.flight.dto.local.SeatRowDTO;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.SeatMapInfoProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapResponse;
 import io.github.rosstxix.flightbooking.feature.flight.repository.FlightRepository;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Service
-public class SeatMapService {
+@Component
+public class GetSeatMapUseCase {
 
     private final FlightRepository flightRepository;
-    private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
 
-    public SeatMapService(
+    public GetSeatMapUseCase(
             FlightRepository flightRepository,
-            BookingService bookingService
+            BookingRepository bookingRepository
     ) {
         this.flightRepository = flightRepository;
-        this.bookingService = bookingService;
+        this.bookingRepository = bookingRepository;
     }
 
     @Transactional(readOnly = true)
-    public SeatMapResponse getSeatMap(Long id) {
+    public SeatMapResponse execute(Long id) {
         SeatMapInfoProjection projection = flightRepository.findSeatMapInfoProjection(id).orElseThrow(
                 () -> new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
         );
@@ -41,7 +42,7 @@ public class SeatMapService {
         int premiumSeatPerRow = projection.getSeatPerPremiumRow();
         String premiumSeatLayout = projection.getPremiumSeatLayout().replace("_", "");
 
-        Set<String> occupiedSeats = bookingService.getOccupiedSeatNumbers(id);
+        Set<String> occupiedSeats = bookingRepository.findOccupiedSeatNumbersByFlightId(id, BookingStatus.CANCELLED);
 
         List<SeatRowDTO> seatRows = new ArrayList<>();
         proceedSeatRows(seatRows, premiumRows, 0, premiumSeatPerRow, premiumSeatLayout, occupiedSeats, true);
@@ -56,6 +57,7 @@ public class SeatMapService {
         );
 
     }
+
 
     private void proceedSeatRows(
             List<SeatRowDTO> seatRows,

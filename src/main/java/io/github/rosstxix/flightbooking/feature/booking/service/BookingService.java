@@ -1,7 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.booking.service;
 
 import io.github.rosstxix.flightbooking.feature.booking.domain.Booking;
-import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
 import io.github.rosstxix.flightbooking.feature.booking.payment.service.PaymentService;
 import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
@@ -13,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 
 @Service
 public class BookingService {
@@ -33,13 +31,6 @@ public class BookingService {
         this.paymentService = paymentService;
         this.flightService = flightService;
         this.userRepository = userRepository;
-    }
-
-    @Transactional(readOnly = true)
-    public Set<String> getOccupiedSeatNumbers(Long id) {
-        return bookingRepository.findOccupiedSeatNumbersByFlightId(
-                id, BookingStatus.CANCELLED
-        );
     }
 
     @Transactional
