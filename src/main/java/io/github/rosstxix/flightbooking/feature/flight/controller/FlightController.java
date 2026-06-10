@@ -3,10 +3,12 @@ package io.github.rosstxix.flightbooking.feature.flight.controller;
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapResponse;
 import io.github.rosstxix.flightbooking.feature.flight.usecase.GetSeatMapUseCase;
+import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
 import io.github.rosstxix.flightbooking.feature.flight.service.FlightService;
+import io.github.rosstxix.flightbooking.infrastructure.openapi.ErrorApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +21,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +78,10 @@ public class FlightController {
                     )
             )
     })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "date : Departure date must be today or in the future")
+    @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
+    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
+    @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Airport with code KBA not found")
     @GetMapping("/search")
     public ResponseEntity<PageResponse<FlightSearchResponse>> searchFlights(
             @ParameterObject @Valid @ModelAttribute FlightSearchRequest request,
@@ -125,6 +132,10 @@ public class FlightController {
                     )
             )
     })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Flight id must be greater than zero")
+    @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
+    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
+    @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Flight with id 1000 was not found")
     @GetMapping("/{id}")
     public ResponseEntity<FlightSearchResponse> getFlightDetails(
             @PathVariable
@@ -177,6 +188,10 @@ public class FlightController {
                     )
             )
     })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Flight id must be greater than zero")
+    @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
+    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
+    @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Flight with id 1000 was not found")
     @GetMapping("/{id}/seats")
     public ResponseEntity<SeatMapResponse> getSeatMap(
             @PathVariable

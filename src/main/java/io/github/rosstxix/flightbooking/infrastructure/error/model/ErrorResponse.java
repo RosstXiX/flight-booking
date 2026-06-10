@@ -14,11 +14,11 @@ public class ErrorResponse {
     private final Instant timestamp = Instant.now();
     @Schema(description = "HTTP status code", example = "400", requiredMode = Schema.RequiredMode.REQUIRED)
     private final int status;
-    @Schema(description = "Error code", example = "VALIDATION_ERROR", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Error code classification", example = "ERROR_CODE", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String error;
-    @Schema(description = "Detailed error message", example = "fromCode : Departure airport code must be a valid IATA code (3 uppercase letters)", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Detailed error message", example = "Description of the specific error", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String message;
-    @Schema(description = "Path of the request", example = "/api/flights/search", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Path of the request", example = "/api/resource", requiredMode = Schema.RequiredMode.REQUIRED)
     private final String path;
 
     public ErrorResponse(
