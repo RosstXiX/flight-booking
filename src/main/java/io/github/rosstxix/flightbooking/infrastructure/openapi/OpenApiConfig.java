@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.config;
+package io.github.rosstxix.flightbooking.infrastructure.openapi;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
