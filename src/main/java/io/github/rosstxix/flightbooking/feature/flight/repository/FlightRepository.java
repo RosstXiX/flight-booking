@@ -103,6 +103,12 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     Optional<SeatMapInfoProjection> findSeatMapInfoProjection(@Param("id") Long id);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT f FROM Flight f WHERE f.id = :id")
+    @Query("""
+                SELECT
+                      f
+                FROM Flight f
+                      JOIN FETCH f.aircraft
+                WHERE f.id = :id
+            """)
     Optional<Flight> findByIdWithLock(@Param("id") Long id);
 }
