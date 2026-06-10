@@ -4,7 +4,9 @@ import io.github.rosstxix.flightbooking.feature.auth.dto.request.LoginRequest;
 import io.github.rosstxix.flightbooking.feature.auth.dto.request.RegisterRequest;
 import io.github.rosstxix.flightbooking.feature.auth.dto.response.LoginResponse;
 import io.github.rosstxix.flightbooking.feature.auth.service.AuthService;
+import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
+import io.github.rosstxix.flightbooking.infrastructure.openapi.ErrorApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -57,6 +59,8 @@ public class AuthController {
                     )
             )
     })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "email : Invalid email address")
+    @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.BAD_CREDENTIALS, message = "Invalid login or password")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request
@@ -82,6 +86,8 @@ public class AuthController {
                     )
             )
     })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "email : Invalid email address")
+    @ErrorApiResponse(status = HttpStatus.CONFLICT, errorCode = ApiErrorCode.EMAIL_ALREADY_EXISTS, message = "User with email user@example.com already exists")
     @PostMapping("/register")
     public ResponseEntity<Void> register(
             @Valid @RequestBody RegisterRequest request
