@@ -1,8 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
-import io.github.rosstxix.flightbooking.feature.catalog.airport.domain.Airport;
-import io.github.rosstxix.flightbooking.feature.catalog.airport.repository.AirportRepository;
+import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
@@ -44,7 +43,7 @@ class FlightServiceTest {
     @Mock
     private FlightMapper flightMapper;
     @Mock
-    private AirportRepository airportRepository;
+    private AirportService airportService;
     @InjectMocks
     private FlightService flightService;
 
@@ -57,7 +56,6 @@ class FlightServiceTest {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
-        Airport departureAirport = buildDepartureAirport();
         FlightProjection projection = mock(FlightProjection.class);
         long totalElements = 1L;
         Page<FlightProjection> projections = new PageImpl<>(
@@ -67,8 +65,8 @@ class FlightServiceTest {
         );
         FlightSearchResponse mappedResponse = buildFlightSearchResponse();
 
-        when(airportRepository.findByCode(FROM_CODE))
-                .thenReturn(Optional.of(departureAirport));
+        when(airportService.getTimeZoneByCode(FROM_CODE))
+                .thenReturn("Europe/Kyiv");
 
         when(flightRepository.searchFlights(any(), any(), any(), any(), any(), any()))
                 .thenReturn(projections);
@@ -106,10 +104,9 @@ class FlightServiceTest {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
-        Airport departureAirport = buildDepartureAirport();
 
-        when(airportRepository.findByCode(FROM_CODE))
-                .thenReturn(Optional.of(departureAirport));
+        when(airportService.getTimeZoneByCode(FROM_CODE))
+                .thenReturn("Europe/Kyiv");
         when(flightRepository.searchFlights(any(), any(), any(), any(), any(), any()))
                 .thenReturn(new PageImpl<>(List.of(), pageable, 0L));
 
@@ -128,12 +125,11 @@ class FlightServiceTest {
     @Test
     void searchFlights_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsKyiv() {
         // Arrange
-        Airport departureAirport = buildDepartureAirport("Europe/Kyiv");
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
 
-        when(airportRepository.findByCode(FROM_CODE))
-                .thenReturn(Optional.of(departureAirport));
+        when(airportService.getTimeZoneByCode(FROM_CODE))
+                .thenReturn("Europe/Kyiv");
 
         when(flightRepository.searchFlights(any(), any(), any(), any(), any(), any()))
                 .thenReturn(Page.empty());
@@ -154,7 +150,7 @@ class FlightServiceTest {
                 eq(pageable)
         );
 
-        ZoneId kyiv = ZoneId.of(departureAirport.getTimeZone());
+        ZoneId kyiv = ZoneId.of("Europe/Kyiv");
 
         Instant expectedStart = SEARCH_DATE.atStartOfDay(kyiv).toInstant();
         Instant expectedEnd = SEARCH_DATE.plusDays(1).atStartOfDay(kyiv).toInstant();
@@ -166,12 +162,11 @@ class FlightServiceTest {
     @Test
     void searchFlights_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsUtc() {
         // Arrange
-        Airport departureAirport = buildDepartureAirport("UTC");
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
 
-        when(airportRepository.findByCode(FROM_CODE))
-                .thenReturn(Optional.of(departureAirport));
+        when(airportService.getTimeZoneByCode(FROM_CODE))
+                .thenReturn("UTC");
 
         when(flightRepository.searchFlights(any(), any(), any(), any(), any(), any()))
                 .thenReturn(Page.empty());
@@ -192,7 +187,7 @@ class FlightServiceTest {
                 eq(pageable)
         );
 
-        ZoneId Utc = ZoneId.of(departureAirport.getTimeZone());
+        ZoneId Utc = ZoneId.of("UTC");
 
         Instant expectedStart = SEARCH_DATE.atStartOfDay(Utc).toInstant();
         Instant expectedEnd = SEARCH_DATE.plusDays(1).atStartOfDay(Utc).toInstant();
@@ -205,12 +200,12 @@ class FlightServiceTest {
     void searchFlights_shouldThrowEntityNotFoundApiException_whenDepartureAirportNotFound() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
-        when(airportRepository.findByCode(FROM_CODE)).thenReturn(Optional.empty());
+        EntityNotFoundApiException exception = new EntityNotFoundApiException("Airport not found");
+        when(airportService.getTimeZoneByCode(FROM_CODE)).thenThrow(exception);
 
         // Act & Assert
         assertThatThrownBy(() -> flightService.searchFlights(request, PageRequest.of(0, 10)))
-                .isInstanceOf(EntityNotFoundApiException.class)
-                .hasMessageContaining(FROM_CODE);
+                .isSameAs(exception);
 
         verifyNoInteractions(flightRepository, flightMapper);
 
@@ -256,18 +251,6 @@ class FlightServiceTest {
         verifyNoInteractions(flightMapper);
     }
 
-
-    private Airport buildDepartureAirport() {
-        return new Airport(
-                FROM_CODE, "Boryspil International Airport", "Kyiv", "Ukraine", "Europe/Kyiv"
-        );
-    }
-
-    private Airport buildDepartureAirport(String timezone) {
-        return new Airport(
-                FROM_CODE, "Boryspil International Airport", "Kyiv", "Ukraine", timezone
-        );
-    }
 
     private FlightSearchRequest buildSearchRequest() {
         return new FlightSearchRequest(FROM_CODE, TO_CODE, SEARCH_DATE);

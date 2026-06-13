@@ -114,7 +114,7 @@ class AuthServiceTest {
 
         // Assert
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).saveAndFlush(userCaptor.capture());
 
         User savedUser = userCaptor.getValue();
         assertThat(savedUser.getEmail()).isEqualTo(request.email());
@@ -135,7 +135,7 @@ class AuthServiceTest {
                 .isInstanceOf(EmailAlreadyExistsApiException.class)
                 .hasMessageContaining(request.email());
 
-        verify(userRepository, never()).save(any());
+        verify(userRepository, never()).saveAndFlush(any());
     }
 
     private static RegisterRequest buildRegisterRequest() {
