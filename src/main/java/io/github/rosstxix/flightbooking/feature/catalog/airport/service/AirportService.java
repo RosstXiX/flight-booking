@@ -15,7 +15,7 @@ public class AirportService {
     }
 
     @Transactional(readOnly = true)
-    public String findTimeZoneByCode(String code) {
+    public String getTimeZoneByCode(String code) {
         return airportRepository.findTimeZoneByCode(code).orElseThrow(
                 () -> new EntityNotFoundApiException("Airport with code %s not found".formatted(code))
         );

@@ -2,7 +2,6 @@ package io.github.rosstxix.flightbooking.feature.flight.service;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
-import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
@@ -40,7 +39,7 @@ public class FlightService {
     public PageResponse<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
         // Convert LocalDate to UTC diapason for searching
 
-        ZoneId zone = ZoneId.of(airportService.findTimeZoneByCode(request.fromCode()));
+        ZoneId zone = ZoneId.of(airportService.getTimeZoneByCode(request.fromCode()));
 
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
         Instant endUtc = request.date().plusDays(1).atStartOfDay(zone).toInstant();
