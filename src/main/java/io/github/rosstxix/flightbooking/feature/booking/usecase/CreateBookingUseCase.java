@@ -40,14 +40,14 @@ public class CreateBookingUseCase {
     ) {
 
         Flight flight = flightRepository.findByIdWithLock(flightId).orElseThrow(
-                () -> new EntityNotFoundApiException("flight with id %d not found".formatted(flightId))
+                () -> new EntityNotFoundApiException("Flight with id %d not found".formatted(flightId))
         );
         flight.getAircraft().validateSeat(seatNumber);
         flight.decrementAvailableSeats();
 
         Booking booking = new Booking(
                 userRepository.findById(userId).orElseThrow(
-                        () -> new EntityNotFoundApiException("user with id %d not found".formatted(userId))
+                        () -> new EntityNotFoundApiException("User with id %d not found".formatted(userId))
                 ),
                 flight,
                 seatNumber
