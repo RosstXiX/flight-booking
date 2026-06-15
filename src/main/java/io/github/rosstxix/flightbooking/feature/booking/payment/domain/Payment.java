@@ -2,7 +2,7 @@ package io.github.rosstxix.flightbooking.feature.booking.payment.domain;
 
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
 import io.github.rosstxix.flightbooking.feature.booking.domain.Booking;
-import io.github.rosstxix.flightbooking.feature.booking.domain.BookingStatus;
+import io.github.rosstxix.flightbooking.infrastructure.error.exception.InvalidPaymentStateApiException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,5 +41,12 @@ public class Payment extends Auditable {
         this.currency = currency;
         this.booking = booking;
         this.status = PaymentStatus.SUCCESS;
+    }
+
+    public void refund() {
+        if (this.status != PaymentStatus.SUCCESS) {
+            throw new InvalidPaymentStateApiException("Payment with id %d is not in success state".formatted(this.id));
+        }
+        this.status = PaymentStatus.REFUNDED;
     }
 }

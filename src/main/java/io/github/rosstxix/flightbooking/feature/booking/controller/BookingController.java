@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.booking.controller;
 
 import io.github.rosstxix.flightbooking.feature.booking.dto.request.BookingCreateRequest;
+import io.github.rosstxix.flightbooking.feature.booking.usecase.CancelBookingUseCase;
 import io.github.rosstxix.flightbooking.feature.booking.usecase.CreateBookingUseCase;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
@@ -18,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @Tag(name = "Bookings", description = "Booking management")
@@ -31,9 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookingController {
 
     private final CreateBookingUseCase createBookingUseCase;
+    private final CancelBookingUseCase cancelBookingUseCase;
 
-    public BookingController(CreateBookingUseCase createBookingUseCase) {
+    public BookingController(
+            CreateBookingUseCase createBookingUseCase,
+            CancelBookingUseCase cancelBookingUseCase
+    ) {
         this.createBookingUseCase = createBookingUseCase;
+        this.cancelBookingUseCase = cancelBookingUseCase;
     }
 
     @Operation(
@@ -104,5 +107,17 @@ public class BookingController {
                 request.seatNumber()
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelBooking(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable Long id
+    ) {
+        cancelBookingUseCase.execute(
+                (Long) jwt.getClaims().get("userId"),
+                id
+        );
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

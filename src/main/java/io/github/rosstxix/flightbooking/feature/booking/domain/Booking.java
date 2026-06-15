@@ -1,6 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.booking.domain;
 
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
+import io.github.rosstxix.flightbooking.feature.booking.payment.domain.Payment;
 import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.InvalidBookingStateApiException;
@@ -29,6 +30,9 @@ public class Booking extends Auditable{
     @Column(name = "seat_number", nullable = false)
     private String seatNumber;  // "17B", "3C" etc
 
+    @OneToOne(mappedBy = "booking")
+    private Payment payment;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookingStatus status = BookingStatus.PENDING;
@@ -45,4 +49,12 @@ public class Booking extends Auditable{
         }
         this.status = BookingStatus.CONFIRMED;
     }
+
+    public void cancelBooking() {
+        if (this.status != BookingStatus.CONFIRMED) {
+            throw new InvalidBookingStateApiException("Booking with id %d is not in confirmed state".formatted(this.id));
+        }
+        this.status = BookingStatus.CANCELLED;
+    }
+
 }
