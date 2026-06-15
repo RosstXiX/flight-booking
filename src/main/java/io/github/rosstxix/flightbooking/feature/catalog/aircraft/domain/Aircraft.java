@@ -1,8 +1,7 @@
 package io.github.rosstxix.flightbooking.feature.catalog.aircraft.domain;
 
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
-import io.github.rosstxix.flightbooking.feature.flight.dto.projection.SeatMapInfoProjection;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatDoesNotExistException;
+import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatDoesNotExistApiException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,7 +65,7 @@ public class Aircraft extends Auditable {
         char inputSeat = seatNumber.charAt(seatNumber.length() - 1);
 
         if (inputRow < 1 || inputRow > rows + premiumRows) {
-            throw new SeatDoesNotExistException("Seat number %s does not exist".formatted(seatNumber));
+            throw new SeatDoesNotExistApiException("Seat number %s does not exist".formatted(seatNumber));
         }
 
         String layout = inputRow <= premiumRows
@@ -75,7 +74,7 @@ public class Aircraft extends Auditable {
         layout = layout.replace("_", "");
 
         if (!layout.contains(String.valueOf(inputSeat))) {
-            throw new SeatDoesNotExistException("Seat number %s does not exist".formatted(seatNumber));
+            throw new SeatDoesNotExistApiException("Seat number %s does not exist".formatted(seatNumber));
         }
     }
 

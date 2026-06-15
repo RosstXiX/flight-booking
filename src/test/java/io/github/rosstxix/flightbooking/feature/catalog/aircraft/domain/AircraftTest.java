@@ -1,6 +1,6 @@
 package io.github.rosstxix.flightbooking.feature.catalog.aircraft.domain;
 
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatDoesNotExistException;
+import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatDoesNotExistApiException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -40,7 +40,7 @@ public class AircraftTest {
 
         // Act and Assert
         assertThatThrownBy(() -> aircraft.validateSeat(seatNumber))
-                .isInstanceOf(SeatDoesNotExistException.class)
+                .isInstanceOf(SeatDoesNotExistApiException.class)
                 .hasMessageContaining(seatNumber);
     }
 
@@ -51,7 +51,7 @@ public class AircraftTest {
 
         // Act and Assert
         assertThatThrownBy(() -> aircraft.validateSeat(seatNumber))
-                .isInstanceOf(SeatDoesNotExistException.class)
+                .isInstanceOf(SeatDoesNotExistApiException.class)
                 .hasMessageContaining(seatNumber);
     }
 
@@ -62,7 +62,7 @@ public class AircraftTest {
 
         // Act and Assert
         assertThatThrownBy(() -> aircraft.validateSeat(seatNumber))
-                .isInstanceOf(SeatDoesNotExistException.class)
+                .isInstanceOf(SeatDoesNotExistApiException.class)
                 .hasMessageContaining(seatNumber);
     }
 
@@ -73,7 +73,7 @@ public class AircraftTest {
 
         // Act and Assert
         assertThatThrownBy(() -> aircraft.validateSeat(seatNumber))
-                .isInstanceOf(SeatDoesNotExistException.class)
+                .isInstanceOf(SeatDoesNotExistApiException.class)
                 .hasMessageContaining(seatNumber);
     }
 
