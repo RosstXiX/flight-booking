@@ -27,8 +27,8 @@ public class CancelBookingUseCase {
             throw new EntityNotFoundApiException("Booking with id %d not found".formatted(bookingId));
         }
 
-        booking.getPayment().refund();
         booking.cancelBooking();
+        booking.getPayment().refund();
         booking.getFlight().incrementAvailableSeats();
 
     }

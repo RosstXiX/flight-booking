@@ -114,11 +114,9 @@ public class CancelBookingUseCaseTest {
         Long userId = 1L;
         Long bookingId = 1L;
         Booking booking = mock(Booking.class);
-        Payment payment = mock(Payment.class);
         User user = mock(User.class);
 
         when(bookingRepository.findByIdWithLock(bookingId)).thenReturn(Optional.of(booking));
-        when(booking.getPayment()).thenReturn(payment);
         when(booking.getUser()).thenReturn(user);
         when(user.getId()).thenReturn(userId);
         doThrow(new InvalidBookingStateApiException("stub: booking already cancelled"))
