@@ -7,7 +7,7 @@ public class InvalidPaymentStateApiException extends ApiException {
 
     public InvalidPaymentStateApiException(String message) {
         super(
-                ApiErrorCode.INVALID_BOOKING_STATE,
+                ApiErrorCode.INVALID_PAYMENT_STATE,
                 HttpStatus.CONFLICT,
                 message
         );

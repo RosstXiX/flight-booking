@@ -31,6 +31,7 @@ public enum ApiErrorCode {
     SEAT_ALREADY_BOOKED("Seat already booked"),
     NO_SEATS_AVAILABLE("No seats available on this flight"),
     INVALID_BOOKING_STATE("Booking state transition is not allowed"),
+    INVALID_PAYMENT_STATE("Invalid payment state"),
 
     // 422
     SEAT_DOES_NOT_EXIST("Seat does not exist"),
