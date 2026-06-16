@@ -1,13 +1,13 @@
 package io.github.rosstxix.flightbooking.feature.booking.usecase;
 
 import io.github.rosstxix.flightbooking.feature.booking.domain.Booking;
+import io.github.rosstxix.flightbooking.feature.booking.payment.domain.InvalidPaymentStateException;
 import io.github.rosstxix.flightbooking.feature.booking.payment.domain.Payment;
 import io.github.rosstxix.flightbooking.feature.booking.repository.BookingRepository;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
 import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.InvalidBookingStateApiException;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.InvalidPaymentStateApiException;
+import io.github.rosstxix.flightbooking.feature.booking.domain.InvalidBookingStateException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -100,16 +100,16 @@ public class CancelBookingUseCaseTest {
         when(booking.getPayment()).thenReturn(payment);
         when(booking.getUser()).thenReturn(user);
         when(user.getId()).thenReturn(userId);
-        doThrow(new InvalidPaymentStateApiException("stub: payment already refunded"))
+        doThrow(new InvalidPaymentStateException("stub: payment already refunded"))
                 .when(payment).refund();
 
         // Act & Assert
         assertThatThrownBy(() -> cancelBookingUseCase.execute(userId, bookingId))
-                .isInstanceOf(InvalidPaymentStateApiException.class);
+                .isInstanceOf(InvalidPaymentStateException.class);
     }
 
     @Test
-    void execute_shouldThrowInvalidBookingStateApiException_whenBookingAlreadyCancelled() {
+    void execute_shouldThrowInvalidBookingStateException_whenBookingAlreadyCancelled() {
         // Arrange
         Long userId = 1L;
         Long bookingId = 1L;
@@ -119,11 +119,11 @@ public class CancelBookingUseCaseTest {
         when(bookingRepository.findByIdWithLock(bookingId)).thenReturn(Optional.of(booking));
         when(booking.getUser()).thenReturn(user);
         when(user.getId()).thenReturn(userId);
-        doThrow(new InvalidBookingStateApiException("stub: booking already cancelled"))
+        doThrow(new InvalidBookingStateException("stub: booking already cancelled"))
                 .when(booking).cancelBooking();
 
         // Act & Assert
         assertThatThrownBy(() -> cancelBookingUseCase.execute(userId, bookingId))
-                .isInstanceOf(InvalidBookingStateApiException.class);
+                .isInstanceOf(InvalidBookingStateException.class);
     }
 }

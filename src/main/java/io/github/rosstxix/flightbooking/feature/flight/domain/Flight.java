@@ -3,7 +3,7 @@ package io.github.rosstxix.flightbooking.feature.flight.domain;
 import io.github.rosstxix.flightbooking.feature.catalog.aircraft.domain.Aircraft;
 import io.github.rosstxix.flightbooking.feature.catalog.airport.domain.Airport;
 import io.github.rosstxix.flightbooking.common.domain.Auditable;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.NoSeatsAvailableApiException;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,7 +71,7 @@ public class Flight extends Auditable {
 
     public void decrementAvailableSeats() {
         if (availableSeats <= 0) {
-            throw new NoSeatsAvailableApiException("Flight %d has no available seats".formatted(this.id));
+            throw new NoSeatsAvailableException("Flight %d has no available seats".formatted(this.id));
         }
         this.availableSeats--;
     }

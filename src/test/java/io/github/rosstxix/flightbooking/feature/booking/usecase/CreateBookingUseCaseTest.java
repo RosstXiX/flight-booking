@@ -10,7 +10,7 @@ import io.github.rosstxix.flightbooking.feature.flight.repository.FlightReposito
 import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.user.repository.UserRepository;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.NoSeatsAvailableApiException;
+import io.github.rosstxix.flightbooking.feature.flight.domain.NoSeatsAvailableException;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatAlreadyBookedApiException;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.SeatDoesNotExistApiException;
 import org.junit.jupiter.api.Test;
@@ -126,12 +126,12 @@ public class CreateBookingUseCaseTest {
         when(flightRepository.findByIdWithLock(flightId)).thenReturn(Optional.of(flight));
         when(flight.getAircraft()).thenReturn(aircraft);
 
-        doThrow(new NoSeatsAvailableApiException("stub: no available seats"))
+        doThrow(new NoSeatsAvailableException("stub: no available seats"))
                 .when(flight).decrementAvailableSeats();
 
         // Act & Assert
         assertThatThrownBy(() -> createBookingUseCase.execute(null, flightId, seatNumber))
-                .isInstanceOf(NoSeatsAvailableApiException.class);
+                .isInstanceOf(NoSeatsAvailableException.class);
         verifyNoInteractions(bookingRepository, paymentService);
     }
 

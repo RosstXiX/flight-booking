@@ -2,6 +2,9 @@ package io.github.rosstxix.flightbooking.infrastructure.error.handler;
 
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import io.github.rosstxix.flightbooking.feature.booking.domain.InvalidBookingStateException;
+import io.github.rosstxix.flightbooking.feature.booking.payment.domain.InvalidPaymentStateException;
+import io.github.rosstxix.flightbooking.feature.flight.domain.NoSeatsAvailableException;
 import io.github.rosstxix.flightbooking.infrastructure.error.ErrorResponseFactory;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.exception.ApiException;
@@ -65,6 +68,57 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(ex.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(InvalidPaymentStateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPaymentStateException(
+            InvalidPaymentStateException ex,
+            HttpServletRequest request
+    ) {
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.INVALID_PAYMENT_STATE, request, ex.getMessage()));
+
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.CONFLICT,
+                ApiErrorCode.INVALID_PAYMENT_STATE,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(InvalidBookingStateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidBookingStateException(
+            InvalidBookingStateException ex,
+            HttpServletRequest request
+    ) {
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.INVALID_BOOKING_STATE, request, ex.getMessage()));
+
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.CONFLICT,
+                ApiErrorCode.INVALID_BOOKING_STATE,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(NoSeatsAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleNoSeatsAvailableException(
+            NoSeatsAvailableException ex,
+            HttpServletRequest request
+    ) {
+        log.warn(LogMessageFormatter.handlerError(ApiErrorCode.NO_SEATS_AVAILABLE, request, ex.getMessage()));
+
+        ErrorResponse response = errorResponseFactory.create(
+                HttpStatus.CONFLICT,
+                ApiErrorCode.NO_SEATS_AVAILABLE,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

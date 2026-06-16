@@ -4,7 +4,7 @@ import io.github.rosstxix.flightbooking.common.domain.Auditable;
 import io.github.rosstxix.flightbooking.feature.booking.payment.domain.Payment;
 import io.github.rosstxix.flightbooking.feature.user.domain.User;
 import io.github.rosstxix.flightbooking.feature.flight.domain.Flight;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.InvalidBookingStateApiException;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,14 +45,14 @@ public class Booking extends Auditable{
 
     public void confirmBooking() {
         if (this.status != BookingStatus.PENDING) {
-            throw new InvalidBookingStateApiException("Booking with id %d is not in pending state".formatted(this.id));
+            throw new InvalidBookingStateException("Booking with id %d is not in pending state".formatted(this.id));
         }
         this.status = BookingStatus.CONFIRMED;
     }
 
     public void cancelBooking() {
         if (this.status != BookingStatus.CONFIRMED) {
-            throw new InvalidBookingStateApiException("Booking with id %d is not in confirmed state".formatted(this.id));
+            throw new InvalidBookingStateException("Booking with id %d is not in confirmed state".formatted(this.id));
         }
         this.status = BookingStatus.CANCELLED;
     }
