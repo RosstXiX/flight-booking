@@ -116,10 +116,49 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(
+            summary = "Get booking details",
+            description = "Retrieves detailed information about a specific booking"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Booking details successfully retrieved",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookingDetailsResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "Token is missing or invalid",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "Access denied",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Booking was not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    })
+    @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Booking id must be greater than zero")
+    @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
+    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
+    @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Booking with id 1000 was not found")
     @GetMapping("/{id}")
     public ResponseEntity<BookingDetailsResponse> getBookingDetails(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable
+            @Parameter(example = "5", required = true)
             @Positive(message = "Booking id must be greater than zero")
             Long id
     ) {
