@@ -1,8 +1,10 @@
 package io.github.rosstxix.flightbooking.feature.booking.controller;
 
 import io.github.rosstxix.flightbooking.feature.booking.dto.request.BookingCreateRequest;
+import io.github.rosstxix.flightbooking.feature.booking.dto.response.BookingDetailsResponse;
 import io.github.rosstxix.flightbooking.feature.booking.usecase.CancelBookingUseCase;
 import io.github.rosstxix.flightbooking.feature.booking.usecase.CreateBookingUseCase;
+import io.github.rosstxix.flightbooking.feature.booking.usecase.GetBookingDetailsUseCase;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.infrastructure.openapi.ErrorApiResponse;
@@ -32,13 +34,16 @@ public class BookingController {
 
     private final CreateBookingUseCase createBookingUseCase;
     private final CancelBookingUseCase cancelBookingUseCase;
+    private final GetBookingDetailsUseCase getBookingDetailsUseCase;
 
     public BookingController(
             CreateBookingUseCase createBookingUseCase,
-            CancelBookingUseCase cancelBookingUseCase
+            CancelBookingUseCase cancelBookingUseCase,
+            GetBookingDetailsUseCase getBookingDetailsUseCase
     ) {
         this.createBookingUseCase = createBookingUseCase;
         this.cancelBookingUseCase = cancelBookingUseCase;
+        this.getBookingDetailsUseCase = getBookingDetailsUseCase;
     }
 
     @Operation(
@@ -109,6 +114,18 @@ public class BookingController {
                 request.seatNumber()
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookingDetailsResponse> getBookingDetails(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable
+            @Positive(message = "Booking id must be greater than zero")
+            Long id
+    ) {
+        Long userId = (Long) jwt.getClaims().get("userId");
+        BookingDetailsResponse response = getBookingDetailsUseCase.execute(userId, id);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
