@@ -3,11 +3,12 @@ package io.github.rosstxix.flightbooking.feature.flight.controller;
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.SeatMapResponse;
 import io.github.rosstxix.flightbooking.feature.flight.usecase.GetSeatMapUseCase;
+import io.github.rosstxix.flightbooking.feature.flight.usecase.SearchFlightsUseCase;
+import io.github.rosstxix.flightbooking.feature.flight.usecase.GetFlightDetailsUseCase;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ApiErrorCode;
 import io.github.rosstxix.flightbooking.infrastructure.error.model.ErrorResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
-import io.github.rosstxix.flightbooking.feature.flight.service.FlightService;
 import io.github.rosstxix.flightbooking.infrastructure.openapi.ErrorApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,11 +34,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/flights")
 public class FlightController {
 
-    private final FlightService flightService;
+    private final SearchFlightsUseCase searchFlightsUseCase;
+    private final GetFlightDetailsUseCase getFlightDetailsUseCase;
     private final GetSeatMapUseCase getSeatMapUseCase;
 
-    public FlightController(FlightService flightService, GetSeatMapUseCase getSeatMapUseCase) {
-        this.flightService = flightService;
+    public FlightController(
+            SearchFlightsUseCase searchFlightsUseCase,
+            GetFlightDetailsUseCase getFlightDetailsUseCase,
+            GetSeatMapUseCase getSeatMapUseCase
+    ) {
+        this.searchFlightsUseCase = searchFlightsUseCase;
+        this.getFlightDetailsUseCase = getFlightDetailsUseCase;
         this.getSeatMapUseCase = getSeatMapUseCase;
     }
 
@@ -87,7 +94,7 @@ public class FlightController {
             @ParameterObject @Valid @ModelAttribute FlightSearchRequest request,
             @ParameterObject Pageable pageable
     ) {
-        PageResponse<FlightSearchResponse> flights = flightService.searchFlights(request, pageable);
+        PageResponse<FlightSearchResponse> flights = searchFlightsUseCase.execute(request, pageable);
         return ResponseEntity.ok(flights);
     }
 
@@ -143,7 +150,7 @@ public class FlightController {
             @Positive(message = "Flight id must be greater than zero")
             Long id
     ) {
-        FlightSearchResponse flight = flightService.getFlightDetails(id);
+        FlightSearchResponse flight = getFlightDetailsUseCase.execute(id);
         return ResponseEntity.ok(flight);
     }
 

@@ -1,31 +1,29 @@
-package io.github.rosstxix.flightbooking.feature.flight.service;
+package io.github.rosstxix.flightbooking.feature.flight.usecase;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
 import io.github.rosstxix.flightbooking.feature.flight.domain.FlightStatus;
-import io.github.rosstxix.flightbooking.infrastructure.error.exception.EntityNotFoundApiException;
 import io.github.rosstxix.flightbooking.feature.flight.dto.projection.FlightProjection;
-import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.dto.request.FlightSearchRequest;
+import io.github.rosstxix.flightbooking.feature.flight.dto.response.FlightSearchResponse;
 import io.github.rosstxix.flightbooking.feature.flight.mapper.FlightMapper;
 import io.github.rosstxix.flightbooking.feature.flight.repository.FlightRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.ZoneId;
 
-@Slf4j
-@Service
-public class FlightService {
+@Component
+public class SearchFlightsUseCase {
+
     private final FlightRepository flightRepository;
     private final FlightMapper flightMapper;
     private final AirportService airportService;
 
-    public FlightService(
+    public SearchFlightsUseCase(
             FlightRepository flightRepository,
             FlightMapper flightMapper,
             AirportService airportService
@@ -36,9 +34,7 @@ public class FlightService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<FlightSearchResponse> searchFlights(FlightSearchRequest request, Pageable pageable) {
-        // Convert LocalDate to UTC diapason for searching
-
+    public PageResponse<FlightSearchResponse> execute(FlightSearchRequest request, Pageable pageable) {
         ZoneId zone = ZoneId.of(airportService.getTimeZoneByCode(request.fromCode()));
 
         Instant startUtc = request.date().atStartOfDay(zone).toInstant();
@@ -56,15 +52,4 @@ public class FlightService {
         Page<FlightSearchResponse> response = projections.map(flightMapper::toSearchResponse);
         return PageResponse.from(response);
     }
-
-    @Transactional(readOnly = true)
-    public FlightSearchResponse getFlightDetails(Long id) {
-        FlightProjection projection = flightRepository.findProjectionById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundApiException("Flight with id %d not found".formatted(id))
-                );
-
-        return flightMapper.toSearchResponse(projection);
-    }
-
 }

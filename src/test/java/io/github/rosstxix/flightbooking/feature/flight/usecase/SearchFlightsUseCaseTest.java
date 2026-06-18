@@ -1,4 +1,4 @@
-package io.github.rosstxix.flightbooking.feature.flight.service;
+package io.github.rosstxix.flightbooking.feature.flight.usecase;
 
 import io.github.rosstxix.flightbooking.common.dto.PageResponse;
 import io.github.rosstxix.flightbooking.feature.catalog.airport.service.AirportService;
@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class FlightServiceTest {
+class SearchFlightsUseCaseTest {
 
     private static final String FROM_CODE = "KBP";
     private static final String TO_CODE = "LWO";
@@ -45,14 +44,10 @@ class FlightServiceTest {
     @Mock
     private AirportService airportService;
     @InjectMocks
-    private FlightService flightService;
-
-    // -------------------
-    // searchFlights
-    // -------------------
+    private SearchFlightsUseCase searchFlightsUseCase;
 
     @Test
-    void searchFlights_shouldReturnPageResponse_whenFlightsFound() {
+    void execute_shouldReturnPageResponse_whenFlightsFound() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
@@ -75,7 +70,7 @@ class FlightServiceTest {
                 .thenReturn(mappedResponse);
 
         // Act
-        PageResponse<FlightSearchResponse> response = flightService.searchFlights(request, pageable);
+        PageResponse<FlightSearchResponse> response = searchFlightsUseCase.execute(request, pageable);
 
         // Assert
         assertThat(response.content()).hasSize(1);
@@ -100,7 +95,7 @@ class FlightServiceTest {
     }
 
     @Test
-    void searchFlights_shouldReturnEmptyPageResponse_whenNoFlightsFound() {
+    void execute_shouldReturnEmptyPageResponse_whenNoFlightsFound() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
@@ -111,7 +106,7 @@ class FlightServiceTest {
                 .thenReturn(new PageImpl<>(List.of(), pageable, 0L));
 
         // Act
-        PageResponse<FlightSearchResponse> response = flightService.searchFlights(request, pageable);
+        PageResponse<FlightSearchResponse> response = searchFlightsUseCase.execute(request, pageable);
 
         // Assert
         assertThat(response.content()).isEmpty();
@@ -123,7 +118,7 @@ class FlightServiceTest {
     }
 
     @Test
-    void searchFlights_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsKyiv() {
+    void execute_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsKyiv() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
@@ -135,7 +130,7 @@ class FlightServiceTest {
                 .thenReturn(Page.empty());
 
         // Act
-        flightService.searchFlights(request, pageable);
+        searchFlightsUseCase.execute(request, pageable);
 
         // Assert
         ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
@@ -160,7 +155,7 @@ class FlightServiceTest {
     }
 
     @Test
-    void searchFlights_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsUtc() {
+    void execute_shouldConvertLocalDateToCorrectUtcRange_whenAirportTimezoneIsUtc() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         Pageable pageable = PageRequest.of(0, 10);
@@ -172,7 +167,7 @@ class FlightServiceTest {
                 .thenReturn(Page.empty());
 
         // Act
-        flightService.searchFlights(request, pageable);
+        searchFlightsUseCase.execute(request, pageable);
 
         // Assert
         ArgumentCaptor<Instant> startCaptor = ArgumentCaptor.forClass(Instant.class);
@@ -197,60 +192,19 @@ class FlightServiceTest {
     }
 
     @Test
-    void searchFlights_shouldThrowEntityNotFoundApiException_whenDepartureAirportNotFound() {
+    void execute_shouldThrowEntityNotFoundApiException_whenDepartureAirportNotFound() {
         // Arrange
         FlightSearchRequest request = buildSearchRequest();
         EntityNotFoundApiException exception = new EntityNotFoundApiException("Airport not found");
         when(airportService.getTimeZoneByCode(FROM_CODE)).thenThrow(exception);
 
         // Act & Assert
-        assertThatThrownBy(() -> flightService.searchFlights(request, PageRequest.of(0, 10)))
+        assertThatThrownBy(() -> searchFlightsUseCase.execute(request, PageRequest.of(0, 10)))
                 .isSameAs(exception);
 
         verifyNoInteractions(flightRepository, flightMapper);
 
     }
-
-    // -------------------
-    // getFlightDetails
-    // -------------------
-
-    @Test
-    void getFlightDetails_shouldReturnFlightResponse_whenFlightFound() {
-        // Arrange
-        long id = 1L;
-        FlightProjection projection = mock(FlightProjection.class);
-        FlightSearchResponse mappedResponse = buildFlightSearchResponse();
-
-        when(flightRepository.findProjectionById(id))
-                .thenReturn(Optional.of(projection));
-        when(flightMapper.toSearchResponse(projection))
-                .thenReturn(mappedResponse);
-
-        // Act
-        FlightSearchResponse response = flightService.getFlightDetails(id);
-
-        // Assert
-        assertThat(response).isSameAs(mappedResponse);
-
-        verify(flightMapper).toSearchResponse(projection);
-
-    }
-
-    @Test
-    void getFlightDetails_shouldThrowEntityNotFoundApiException_whenFlightNotFound() {
-        // Arrange
-        long id = 1L;
-        when(flightRepository.findProjectionById(id)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThatThrownBy(() -> flightService.getFlightDetails(id))
-                .isInstanceOf(EntityNotFoundApiException.class)
-                .hasMessageContaining(String.valueOf(id));
-
-        verifyNoInteractions(flightMapper);
-    }
-
 
     private FlightSearchRequest buildSearchRequest() {
         return new FlightSearchRequest(FROM_CODE, TO_CODE, SEARCH_DATE);
