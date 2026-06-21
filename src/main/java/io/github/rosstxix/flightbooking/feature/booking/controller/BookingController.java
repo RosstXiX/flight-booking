@@ -69,13 +69,6 @@ public class BookingController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403", description = "Access denied",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404", description = "Flight you trying to book for was not found",
                     content = @Content(
                             mediaType = "application/json",
@@ -99,7 +92,6 @@ public class BookingController {
     })
     @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "seatNumber : Seat number must be in the format '1A', '12B', etc")
     @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
-    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
     @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Flight with id 1000 was not found")
     @ErrorApiResponse(status = HttpStatus.CONFLICT, errorCode = ApiErrorCode.SEAT_ALREADY_BOOKED, message = "Seat with number 1A already booked")
     @ErrorApiResponse(status = HttpStatus.UNPROCESSABLE_ENTITY, errorCode = ApiErrorCode.SEAT_DOES_NOT_EXIST, message = "Seat with number 99R does not exist")
@@ -129,14 +121,14 @@ public class BookingController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "401", description = "Token is missing or invalid",
+                    responseCode = "400", description = "Invalid booking ID",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "403", description = "Access denied",
+                    responseCode = "401", description = "Token is missing or invalid",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
@@ -152,7 +144,6 @@ public class BookingController {
     })
     @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Booking id must be greater than zero")
     @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
-    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
     @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Booking with id 1000 was not found")
     @GetMapping("/{id}")
     public ResponseEntity<BookingDetailsResponse> getBookingDetails(
@@ -176,7 +167,7 @@ public class BookingController {
                     responseCode = "200", description = "Booking cancelled successfully"
             ),
             @ApiResponse(
-                    responseCode = "400", description = "Invalid request body",
+                    responseCode = "400", description = "Invalid booking ID",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
@@ -184,13 +175,6 @@ public class BookingController {
             ),
             @ApiResponse(
                     responseCode = "401", description = "Token is missing or invalid",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "Access denied",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
@@ -213,7 +197,6 @@ public class BookingController {
     })
     @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Booking id must be greater than zero")
     @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
-    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
     @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Booking with id 1000 was not found")
     @ErrorApiResponse(status = HttpStatus.CONFLICT, errorCode = ApiErrorCode.INVALID_BOOKING_STATE, message = "Booking with id 5 is already cancelled")
     @PatchMapping("/{id}/cancel")

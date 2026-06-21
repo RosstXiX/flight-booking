@@ -71,13 +71,6 @@ public class FlightController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403", description = "Access denied",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404", description = "One of the listed airports was not found",
                     content = @Content(
                             mediaType = "application/json",
@@ -87,7 +80,6 @@ public class FlightController {
     })
     @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "date : Departure date must be today or in the future")
     @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
-    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
     @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Airport with code KBA not found")
     @GetMapping("/search")
     public ResponseEntity<PageResponse<FlightSearchResponse>> searchFlights(
@@ -125,13 +117,6 @@ public class FlightController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403", description = "Access denied",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
                     responseCode = "404", description = "Flight with the specified ID was not found",
                     content = @Content(
                             mediaType = "application/json",
@@ -141,7 +126,6 @@ public class FlightController {
     })
     @ErrorApiResponse(status = HttpStatus.BAD_REQUEST, errorCode = ApiErrorCode.VALIDATION_ERROR, message = "id : Flight id must be greater than zero")
     @ErrorApiResponse(status = HttpStatus.UNAUTHORIZED, errorCode = ApiErrorCode.TOKEN_INVALID, message = "JWT token is invalid")
-    @ErrorApiResponse(status = HttpStatus.FORBIDDEN, errorCode = ApiErrorCode.ACCESS_DENIED, message = "Access denied")
     @ErrorApiResponse(status = HttpStatus.NOT_FOUND, errorCode = ApiErrorCode.ENTITY_NOT_FOUND, message = "Flight with id 1000 was not found")
     @GetMapping("/{id}")
     public ResponseEntity<FlightSearchResponse> getFlightDetails(
@@ -175,13 +159,6 @@ public class FlightController {
             ),
             @ApiResponse(
                     responseCode = "401", description = "Token is missing or invalid",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "Access denied",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)
