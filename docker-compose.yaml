@@ -1,0 +1,33 @@
+services:
+  app:
+    image: flight-booking-app
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_DEV_URL: jdbc:postgresql://postgres:5432/flightbookingdb
+      DB_DEV_USERNAME: flightuser
+      DB_DEV_PASSWORD: flightpassword
+      JWT_SECRET: jwt-secret-key-for-local-development-only
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: flightbookingdb
+      POSTGRES_USER: flightuser
+      POSTGRES_PASSWORD: flightpassword
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flightuser -d flightbookingdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres-data:/var/lib/postgresql
+
+volumes:
+  postgres-data:
